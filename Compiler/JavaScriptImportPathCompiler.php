@@ -50,7 +50,7 @@ final class JavaScriptImportPathCompiler implements AssetCompilerInterface
             )
             \s*[\'"`](\.\/[^\'"`\n]++|(\.\.\/)*+[^\'"`\n]++)[\'"`]\s*[;\)]
         ?
-    /mx';
+    /mxu';
 
     public function __construct(
         private readonly ImportMapConfigReader $importMapConfigReader,
