@@ -14,11 +14,10 @@ namespace Symfony\Component\AssetMapper\Tests\Fixtures;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 
-class AssetMapperTestAppKernel extends Kernel
+class ImportMapTestAppKernel extends Kernel
 {
     public function registerBundles(): iterable
     {
@@ -43,13 +42,10 @@ class AssetMapperTestAppKernel extends Kernel
                 'http_client' => true,
                 'assets' => null,
                 'asset_mapper' => [
-                    'paths' => ['dir1', 'dir2', 'non_ascii', 'assets'],
-                    'public_prefix' => 'assets',
+                    'paths' => ['assets'],
                 ],
                 'test' => true,
             ]);
-
-            $container->setAlias('public.assets.packages', new Alias('assets.packages', true));
         });
     }
 
