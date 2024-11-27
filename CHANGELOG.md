@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+7.3
+---
+
+ * Add support for pre-compressing assets with Brotli, Zstandard, Zopfli, and gzip
+
 7.2
 ---
 
