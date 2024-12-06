@@ -38,6 +38,9 @@ final class ZopfliCompressor implements SupportedCompressorInterface
         (new Process([$this->executable, '--', $path]))->mustRun();
     }
 
+    /**
+     * @return resource
+     */
     private function createStreamContext()
     {
         throw new \BadMethodCallException('Extension is not supported yet.');
