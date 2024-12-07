@@ -22,7 +22,8 @@ use Symfony\Component\Process\Process;
 final class GzipCompressor implements SupportedCompressorInterface
 {
     use CompressorTrait {
-        compress as baseCompress;
+        compress as private baseCompress;
+        getUnsupportedReason as private baseGetUnsupportedReason;
     }
 
     private const WRAPPER = 'compress.zlib';
@@ -49,6 +50,15 @@ final class GzipCompressor implements SupportedCompressorInterface
         }
 
         $this->baseCompress($path);
+    }
+
+    public function getUnsupportedReason(): ?string
+    {
+        if (null === $this->zopfliCompressor->getUnsupportedReason()) {
+            return null;
+        }
+
+        return $this->baseGetUnsupportedReason();
     }
 
     /**
