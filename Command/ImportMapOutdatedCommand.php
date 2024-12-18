@@ -76,6 +76,12 @@ EOT
         $packagesUpdateInfos = $this->updateChecker->getAvailableUpdates($packages);
         $packagesUpdateInfos = array_filter($packagesUpdateInfos, fn ($packageUpdateInfo) => $packageUpdateInfo->hasUpdate());
         if (0 === \count($packagesUpdateInfos)) {
+            if ('json' === $input->getOption('format')) {
+                $io->writeln('[]');
+            } else {
+                $io->writeln('No updates found.');
+            }
+
             return Command::SUCCESS;
         }
 
