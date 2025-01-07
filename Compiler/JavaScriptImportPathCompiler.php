@@ -92,6 +92,11 @@ final class JavaScriptImportPathCompiler implements AssetCompilerInterface
                 return $fullImportString;
             }
 
+            // Ignore self-referencing import
+            if ($dependentAsset->logicalPath === $asset->logicalPath) {
+                return $fullImportString;
+            }
+
             // List as a JavaScript import.
             // This will cause the asset to be included in the importmap (for relative imports)
             // and will be used to generate the preloads in the importmap.
