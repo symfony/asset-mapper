@@ -230,5 +230,10 @@ class JavascriptSequenceParserTest extends TestCase
             3,
             false,
         ];
+        yield 'after unclosed string' => [
+            '"hello',
+            6,
+            true,
+        ];
     }
 }
