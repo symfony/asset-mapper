@@ -152,6 +152,7 @@ final class JavascriptSequenceParser
 
                 if (false === $endPos) {
                     $this->endsWithSequence(self::STATE_STRING, $position);
+
                     return;
                 }
 
