@@ -138,20 +138,21 @@ final class JavascriptSequenceParser
                 while (false !== $endPos = strpos($this->content, $matchChar, $endPos)) {
                     $backslashes = 0;
                     $i = $endPos - 1;
-                    while ($i >= 0 && $this->content[$i] === '\\') {
-                        $backslashes++;
-                        $i--;
+                    while ($i >= 0 && '\\' === $this->content[$i]) {
+                        ++$backslashes;
+                        --$i;
                     }
 
                     if (0 === $backslashes % 2) {
                         break;
                     }
 
-                    $endPos++;
+                    ++$endPos;
                 }
 
                 if (false === $endPos) {
                     $this->endsWithSequence(self::STATE_STRING, $position);
+
                     return;
                 }
 
