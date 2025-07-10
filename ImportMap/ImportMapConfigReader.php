@@ -43,7 +43,7 @@ class ImportMapConfigReader
         foreach ($importMapConfig ?? [] as $importName => $data) {
             $validKeys = ['path', 'version', 'type', 'entrypoint', 'url', 'package_specifier', 'downloaded_to', 'preload'];
             if ($invalidKeys = array_diff(array_keys($data), $validKeys)) {
-                throw new \InvalidArgumentException(sprintf('The following keys are not valid for the importmap entry "%s": "%s". Valid keys are: "%s".', $importName, implode('", "', $invalidKeys), implode('", "', $validKeys)));
+                throw new \InvalidArgumentException(\sprintf('The following keys are not valid for the importmap entry "%s": "%s". Valid keys are: "%s".', $importName, implode('", "', $invalidKeys), implode('", "', $validKeys)));
             }
 
             // should solve itself when the config is written again
@@ -70,10 +70,10 @@ class ImportMapConfigReader
 
             if (isset($data['path'])) {
                 if (isset($data['version'])) {
-                    throw new RuntimeException(sprintf('The importmap entry "%s" cannot have both a "path" and "version" option.', $importName));
+                    throw new RuntimeException(\sprintf('The importmap entry "%s" cannot have both a "path" and "version" option.', $importName));
                 }
                 if (isset($data['package_specifier'])) {
-                    throw new RuntimeException(sprintf('The importmap entry "%s" cannot have both a "path" and "package_specifier" option.', $importName));
+                    throw new RuntimeException(\sprintf('The importmap entry "%s" cannot have both a "path" and "package_specifier" option.', $importName));
                 }
 
                 $entries->add(ImportMapEntry::createLocal($importName, $type, $data['path'], $isEntrypoint));
@@ -88,7 +88,7 @@ class ImportMapConfigReader
             }
 
             if (null === $version) {
-                throw new RuntimeException(sprintf('The importmap entry "%s" must have either a "path" or "version" option.', $importName));
+                throw new RuntimeException(\sprintf('The importmap entry "%s" must have either a "path" or "version" option.', $importName));
             }
 
             $packageModuleSpecifier = $data['package_specifier'] ?? $importName;

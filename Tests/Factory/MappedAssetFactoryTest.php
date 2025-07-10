@@ -52,7 +52,7 @@ class MappedAssetFactoryTest extends TestCase
 
     public function testCreateMappedAssetWithContentThatChanged()
     {
-        $file1Compiler = new class() implements AssetCompilerInterface {
+        $file1Compiler = new class implements AssetCompilerInterface {
             public function supports(MappedAsset $asset): bool
             {
                 return true;
@@ -94,7 +94,7 @@ class MappedAssetFactoryTest extends TestCase
 
     public function testCreateMappedAssetWithDigest()
     {
-        $file6Compiler = new class() implements AssetCompilerInterface {
+        $file6Compiler = new class implements AssetCompilerInterface {
             public function supports(MappedAsset $asset): bool
             {
                 return true;
@@ -187,7 +187,7 @@ class MappedAssetFactoryTest extends TestCase
                 } elseif (str_contains($sourcePath, 'circular_dir')) {
                     $logicalPath = substr($sourcePath, strpos($sourcePath, 'circular_dir') + 13);
                 } else {
-                    throw new \RuntimeException(sprintf('Could not find asset "%s".', $sourcePath));
+                    throw new \RuntimeException(\sprintf('Could not find asset "%s".', $sourcePath));
                 }
 
                 return $factory->createMappedAsset($logicalPath, $sourcePath);
