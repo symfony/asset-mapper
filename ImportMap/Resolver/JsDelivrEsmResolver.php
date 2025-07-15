@@ -196,7 +196,7 @@ final class JsDelivrEsmResolver implements PackageResolverInterface
 
             $dependencies = [];
             $extraFiles = [];
-            /* @var ImportMapEntry $entry */
+            /** @var ImportMapEntry $entry */
             $contents[$package] = [
                 'content' => $this->makeImportsBare($response->getContent(), $dependencies, $extraFiles, $entry->type, $entry->getPackagePathString()),
                 'dependencies' => $dependencies,
