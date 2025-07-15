@@ -248,7 +248,7 @@ class ImportMapManagerTest extends TestCase
             ->method('resolvePackages')
             ->with($this->callback(function ($packages) {
                 $this->assertInstanceOf(PackageRequireOptions::class, $packages[0]);
-                /* @var PackageRequireOptions[] $packages */
+                /** @var PackageRequireOptions[] $packages */
                 $this->assertCount(2, $packages);
 
                 $this->assertSame('lodash', $packages[0]->packageModuleSpecifier);
