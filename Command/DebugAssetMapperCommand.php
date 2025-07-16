@@ -43,7 +43,7 @@ final class DebugAssetMapperCommand extends Command
     {
         $this
             ->addArgument('name', InputArgument::OPTIONAL, 'An asset name (or a path) to search for (e.g. "app")')
-            ->addOption('ext', null, InputOption::VALUE_REQUIRED, 'Filter assets by extension (e.g. "css")', null, ['js', 'css', 'png'])
+            ->addOption('ext', null, InputOption::VALUE_REQUIRED, 'Filter assets by extension (e.g. "css")', null, ['js', 'css', 'json'])
             ->addOption('full', null, null, 'Whether to show the full paths')
             ->addOption('vendor', null, InputOption::VALUE_NEGATABLE, 'Only show assets from vendor packages')
             ->setHelp(<<<'EOT'
