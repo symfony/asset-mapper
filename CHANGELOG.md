@@ -5,6 +5,7 @@ CHANGELOG
 ---
 
  * Remove `ImportMapConfigReader::splitPackageNameAndFilePath()`, use `ImportMapEntry::splitPackageNameAndFilePath()` instead
+ * Make argument `$projectDir` of `ImportMapRequireCommand` mandatory
 
 7.3
 ---
