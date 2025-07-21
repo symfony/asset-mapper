@@ -18,7 +18,6 @@
     "require": {
         "php": ">=8.4",
         "composer/semver": "^3.0",
-        "symfony/deprecation-contracts": "^2.1|^3",
         "symfony/filesystem": "^7.4|^8.0",
         "symfony/http-client": "^7.4|^8.0"
     },
