@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+7.4
+---
+
+ * Add support for loading JSON using import statements
+
 7.3
 ---
 
