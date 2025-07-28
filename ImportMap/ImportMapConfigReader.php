@@ -49,7 +49,7 @@ class ImportMapConfigReader
                 throw new \InvalidArgumentException(\sprintf('The following keys are not valid for the importmap entry "%s": "%s". Valid keys are: "%s".', $importName, implode('", "', $invalidKeys), implode('", "', $validKeys)));
             }
 
-            $type = isset($data['type']) ? ImportMapType::tryFrom($data['type']) : ImportMapType::JS;
+            $type = ImportMapType::tryFrom($data['type'] ?? 'js') ?? ImportMapType::JS;
             $isEntrypoint = $data['entrypoint'] ?? false;
 
             if (isset($data['path'])) {

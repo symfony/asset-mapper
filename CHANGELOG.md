@@ -7,6 +7,11 @@ CHANGELOG
  * Remove `ImportMapConfigReader::splitPackageNameAndFilePath()`, use `ImportMapEntry::splitPackageNameAndFilePath()` instead
  * Make argument `$projectDir` of `ImportMapRequireCommand` mandatory
 
+7.4
+---
+
+ * Add support for loading JSON using import statements
+
 7.3
 ---
 
