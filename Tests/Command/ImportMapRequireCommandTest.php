@@ -32,9 +32,7 @@ class ImportMapRequireCommandTest extends KernelTestCase
         return ImportMapTestAppKernel::class;
     }
 
-    /**
-     * @dataProvider getRequirePackageTests
-     */
+    #[DataProvider('getRequirePackageTests')]
     public function testDryRunOptionToShowInformationBeforeApplyInstallation(int $verbosity, array $packageEntries, array $packagesToInstall, string $expected, ?string $path = null)
     {
         $importMapManager = $this->createMock(ImportMapManager::class);

@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\AssetMapper\Tests\Compiler;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\AssetMapper\AssetMapperInterface;
 use Symfony\Component\AssetMapper\Compiler\SourceMappingUrlsCompiler;
@@ -18,9 +19,7 @@ use Symfony\Component\AssetMapper\MappedAsset;
 
 class SourceMappingUrlsCompilerTest extends TestCase
 {
-    /**
-     * @dataProvider provideCompileTests
-     */
+    #[DataProvider('provideCompileTests')]
     public function testCompile(string $sourceLogicalName, string $input, string $expectedOutput, $expectedDependencies)
     {
         $assetMapper = $this->createMock(AssetMapperInterface::class);

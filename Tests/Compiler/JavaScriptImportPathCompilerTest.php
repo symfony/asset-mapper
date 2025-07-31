@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\AssetMapper\Tests\Compiler;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\AssetMapper\AssetMapperInterface;
@@ -25,9 +26,7 @@ use Symfony\Component\AssetMapper\MappedAsset;
 
 class JavaScriptImportPathCompilerTest extends TestCase
 {
-    /**
-     * @dataProvider provideCompileTests
-     */
+    #[DataProvider('provideCompileTests')]
     public function testCompileFindsCorrectImports(string $input, array $expectedJavaScriptImports)
     {
         $asset = new MappedAsset('app.js', '/project/assets/app.js', publicPathWithoutDigest: '/assets/app.js');
@@ -456,9 +455,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
         $this->assertSame('root_asset.js', $inputAsset->getJavaScriptImports()[2]->assetLogicalPath);
     }
 
-    /**
-     * @dataProvider providePathsCanUpdateTests
-     */
+    #[DataProvider('providePathsCanUpdateTests')]
     public function testImportPathsCanUpdateForDifferentPublicPath(string $input, string $inputAssetPublicPath, string $importedPublicPath, string $expectedOutput)
     {
         $asset = new MappedAsset('app.js', '/path/to/assets/app.js', publicPathWithoutDigest: $inputAssetPublicPath);
@@ -593,9 +590,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
         $this->assertCount(0, $bootstrapAsset->getJavaScriptImports());
     }
 
-    /**
-     * @dataProvider provideMissingImportModeTests
-     */
+    #[DataProvider('provideMissingImportModeTests')]
     public function testMissingImportMode(string $sourceLogicalName, string $input, ?string $expectedExceptionMessage)
     {
         if (null !== $expectedExceptionMessage) {

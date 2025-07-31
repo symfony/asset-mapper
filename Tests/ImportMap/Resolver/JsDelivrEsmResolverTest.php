@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\AssetMapper\Tests\ImportMap\Resolver;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\AssetMapper\ImportMap\ImportMapEntry;
 use Symfony\Component\AssetMapper\ImportMap\ImportMapType;
@@ -21,9 +22,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 
 class JsDelivrEsmResolverTest extends TestCase
 {
-    /**
-     * @dataProvider provideResolvePackagesTests
-     */
+    #[DataProvider('provideResolvePackagesTests')]
     public function testResolvePackages(array $packages, array $expectedRequests, array $expectedResolvedPackages)
     {
         $responses = [];
@@ -265,9 +264,7 @@ class JsDelivrEsmResolverTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideDownloadPackagesTests
-     */
+    #[DataProvider('provideDownloadPackagesTests')]
     public function testDownloadPackages(array $importMapEntries, array $expectedRequests, array $expectedReturn)
     {
         $responses = [];
@@ -584,9 +581,7 @@ EOF,
         ]);
     }
 
-    /**
-     * @dataProvider provideImportRegex
-     */
+    #[DataProvider('provideImportRegex')]
     public function testImportRegex(string $subject, array $expectedPackages)
     {
         preg_match_all(JsDelivrEsmResolver::IMPORT_REGEX, $subject, $matches);

@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\AssetMapper\Tests\ImportMap;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\AssetMapper\ImportMap\ImportMapEntry;
 use Symfony\Component\AssetMapper\ImportMap\ImportMapType;
@@ -113,9 +114,7 @@ class RemotePackageStorageTest extends TestCase
         $this->assertEquals('any content', $this->filesystem->readFile($targetPath));
     }
 
-    /**
-     * @dataProvider getDownloadPathTests
-     */
+    #[DataProvider('getDownloadPathTests')]
     public function testGetDownloadedPath(string $packageModuleSpecifier, ImportMapType $importMapType, string $expectedPath)
     {
         $storage = new RemotePackageStorage(self::$writableRoot.'/assets/vendor');
