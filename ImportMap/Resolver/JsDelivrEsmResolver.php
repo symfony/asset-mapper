@@ -184,6 +184,7 @@ final class JsDelivrEsmResolver implements PackageResolverInterface
         $errors = [];
         $contents = [];
         $extraFileResponses = [];
+        /** @var ImportMapEntry $entry */
         foreach ($responses as $package => [$response, $entry]) {
             if (200 !== $response->getStatusCode()) {
                 $errors[] = [$package, $response];
@@ -196,7 +197,6 @@ final class JsDelivrEsmResolver implements PackageResolverInterface
 
             $dependencies = [];
             $extraFiles = [];
-            /** @var ImportMapEntry $entry */
             $contents[$package] = [
                 'content' => $this->makeImportsBare($response->getContent(), $dependencies, $extraFiles, $entry->type, $entry->getPackagePathString()),
                 'dependencies' => $dependencies,
