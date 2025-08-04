@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\AssetMapper\Tests\ImportMap;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\AssetMapper\ImportMap\ImportMapConfigReader;
 use Symfony\Component\AssetMapper\ImportMap\ImportMapEntries;
@@ -106,9 +107,7 @@ EOF;
         $this->assertSame($originalImportMapData, $newImportMapData);
     }
 
-    /**
-     * @dataProvider getPathToFilesystemPathTests
-     */
+    #[DataProvider('getPathToFilesystemPathTests')]
     public function testConvertPathToFilesystemPath(string $path, string $expectedPath)
     {
         $configReader = new ImportMapConfigReader(realpath(__DIR__.'/../Fixtures/importmap.php'), $this->createMock(RemotePackageStorage::class));
@@ -130,9 +129,7 @@ EOF;
         ];
     }
 
-    /**
-     * @dataProvider getFilesystemPathToPathTests
-     */
+    #[DataProvider('getFilesystemPathToPathTests')]
     public function testConvertFilesystemPathToPath(string $path, ?string $expectedPath)
     {
         $configReader = new ImportMapConfigReader(__DIR__.'/../Fixtures/importmap.php', $this->createMock(RemotePackageStorage::class));
