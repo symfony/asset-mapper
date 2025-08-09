@@ -42,27 +42,27 @@ class ImportMapConfigReaderTest extends TestCase
     public function testGetEntriesAndWriteEntries()
     {
         $importMap = <<<EOF
-<?php
-return [
-    'remote_package' => [
-        'version' => '3.2.1',
-    ],
-    'local_package' => [
-        'path' => 'app.js',
-    ],
-    'type_css' => [
-        'path' => 'styles/app.css',
-        'type' => 'css',
-    ],
-    'entry_point' => [
-        'path' => 'entry.js',
-        'entrypoint' => true,
-    ],
-    'package/with_file.js' => [
-        'version' => '1.0.0',
-    ],
-];
-EOF;
+            <?php
+            return [
+                'remote_package' => [
+                    'version' => '3.2.1',
+                ],
+                'local_package' => [
+                    'path' => 'app.js',
+                ],
+                'type_css' => [
+                    'path' => 'styles/app.css',
+                    'type' => 'css',
+                ],
+                'entry_point' => [
+                    'path' => 'entry.js',
+                    'entrypoint' => true,
+                ],
+                'package/with_file.js' => [
+                    'version' => '1.0.0',
+                ],
+            ];
+            EOF;
         file_put_contents(__DIR__.'/../Fixtures/importmap_config_reader/importmap.php', $importMap);
 
         $remotePackageStorage = $this->createMock(RemotePackageStorage::class);
