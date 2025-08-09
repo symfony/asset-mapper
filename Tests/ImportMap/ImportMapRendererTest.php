@@ -137,7 +137,9 @@ class ImportMapRendererTest extends TestCase
                 script.src = 'https://polyfillUrl.example';
                 script.setAttribute('something', 'something');
                 script.setAttribute('data-turbo-track', 'reload');
-            EOTXT, $html);
+            EOTXT,
+            $html
+        );
     }
 
     public function testWithEntrypoint()

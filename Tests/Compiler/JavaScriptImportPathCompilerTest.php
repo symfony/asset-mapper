@@ -121,8 +121,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                 import("./other.js");
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => ['/assets/other.js' => ['lazy' => true, 'asset' => 'other.js', 'add' => true]],
         ];
 
@@ -182,8 +181,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
                     myFunction,
                     helperFunction
                 } from "./other.js";
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => ['/assets/other.js' => ['lazy' => false, 'asset' => 'other.js', 'add' => true]],
         ];
 
@@ -239,8 +237,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                 // import("./other.js");
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => [],
         ];
 
@@ -248,8 +245,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                  // import("./other.js");
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => [],
         ];
 
@@ -257,8 +253,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                 // this is not going to be parsed import("./other.js");
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => [],
         ];
 
@@ -266,8 +261,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                 console.log('// I am not really a comment'); import("./other.js");
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => ['/assets/other.js' => ['lazy' => true, 'asset' => 'other.js', 'add' => true]],
         ];
 
@@ -275,8 +269,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                 /* comment */ import("./other.js");
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => ['/assets/other.js' => ['lazy' => true, 'asset' => 'other.js', 'add' => true]],
         ];
 
@@ -284,8 +277,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                     /* comment import("./other.js"); */
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => [],
         ];
 
@@ -295,8 +287,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
                     /* comment import("./other.js");
                     and more
                     */
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => [],
         ];
 
@@ -304,8 +295,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                     console.log('/* not a comment'); import("./other.js");
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => ['/assets/other.js' => ['lazy' => true, 'asset' => 'other.js', 'add' => true]],
         ];
 
@@ -313,8 +303,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                 console.log("import('./foo.js')");
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => [],
         ];
 
@@ -322,8 +311,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                 console.log(" foo \" import('./foo.js')");
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => [],
         ];
 
@@ -331,8 +319,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                 console.log('import("./foo.js")');
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => [],
         ];
 
@@ -340,8 +327,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                 console.log("import('./other.js')"); import("./foo.js");
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => ['/assets/foo.js' => ['lazy' => true, 'asset' => 'foo.js', 'add' => true]],
         ];
 
@@ -349,8 +335,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                 import("./other.js"); console.log("import('./foo.js')");
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => ['/assets/other.js' => ['lazy' => true, 'asset' => 'other.js', 'add' => true]],
         ];
 
@@ -358,8 +343,7 @@ class JavaScriptImportPathCompilerTest extends TestCase
             'input' => <<<EOF
                 const fun;
                 import("./other.js"); console.log("import('./foo.js')"); import("./subdir/foo.js");
-                EOF
-            ,
+                EOF,
             'expectedJavaScriptImports' => [
                 '/assets/other.js' => ['lazy' => true, 'asset' => 'other.js', 'add' => true],
                 '/assets/subdir/foo.js' => ['lazy' => true, 'asset' => 'subdir/foo.js', 'add' => true],
