@@ -134,10 +134,10 @@ class ImportMapRendererTest extends TestCase
         $this->assertStringContainsString('<script type="importmap" something data-turbo-track="reload">', $html);
         $this->assertStringContainsString('<script something data-turbo-track="reload">', $html);
         $this->assertStringContainsString(<<<EOTXT
-            script.src = 'https://polyfillUrl.example';
-            script.setAttribute('something', 'something');
-            script.setAttribute('data-turbo-track', 'reload');
-        EOTXT, $html);
+                script.src = 'https://polyfillUrl.example';
+                script.setAttribute('something', 'something');
+                script.setAttribute('data-turbo-track', 'reload');
+            EOTXT, $html);
     }
 
     public function testWithEntrypoint()
