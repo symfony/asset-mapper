@@ -60,13 +60,11 @@ class SourceMappingUrlsCompilerTest extends TestCase
             'input' => <<<EOF
                 var fun;
                 //# sourceMappingURL=foo.js.map
-                EOF
-            ,
+                EOF,
             'expectedOutput' => <<<EOF
                 var fun;
                 //# sourceMappingURL=foo.123456.js.map
-                EOF
-            ,
+                EOF,
             'expectedDependencies' => ['foo.js.map'],
         ];
 
@@ -75,13 +73,11 @@ class SourceMappingUrlsCompilerTest extends TestCase
             'input' => <<<EOF
                 .class { color: green; }
                 /*# sourceMappingURL=bar.css.map */
-                EOF
-            ,
+                EOF,
             'expectedOutput' => <<<EOF
                 .class { color: green; }
                 /*# sourceMappingURL=bar.abcd123.css.map */
-                EOF
-            ,
+                EOF,
             'expectedDependencies' => ['styles/bar.css.map'],
         ];
 
@@ -90,13 +86,11 @@ class SourceMappingUrlsCompilerTest extends TestCase
             'input' => <<<EOF
                 .class { color: green; }
                 /*# sourceMappingURL=../sourcemaps/baz.css.map */
-                EOF
-            ,
+                EOF,
             'expectedOutput' => <<<EOF
                 .class { color: green; }
                 /*# sourceMappingURL=../sourcemaps/baz.987fedc.css.map */
-                EOF
-            ,
+                EOF,
             'expectedDependencies' => ['sourcemaps/baz.css.map'],
         ];
 
@@ -104,12 +98,10 @@ class SourceMappingUrlsCompilerTest extends TestCase
             'sourceLogicalName' => 'styles/bar.css',
             'input' => <<<EOF
                 .class { color: green; }
-                EOF
-            ,
+                EOF,
             'expectedOutput' => <<<EOF
                 .class { color: green; }
-                EOF
-            ,
+                EOF,
             'expectedDependencies' => [],
         ];
 
@@ -118,13 +110,11 @@ class SourceMappingUrlsCompilerTest extends TestCase
             'input' => <<<EOF
                 .class { color: green; }
                 /*# sourceMappingURL=unknown.css.map */
-                EOF
-            ,
+                EOF,
             'expectedOutput' => <<<EOF
                 .class { color: green; }
                 /*# sourceMappingURL=unknown.css.map */
-                EOF
-            ,
+                EOF,
             'expectedDependencies' => [],
         ];
 
@@ -134,14 +124,12 @@ class SourceMappingUrlsCompilerTest extends TestCase
                 .class::before {
                   content: "# sourceMappingURL=sourceMappingURL-outside-comment.css.map";
                 }
-                EOF
-            ,
+                EOF,
             'expectedOutput' => <<<EOF
                 .class::before {
                   content: "# sourceMappingURL=sourceMappingURL-outside-comment.css.map";
                 }
-                EOF
-            ,
+                EOF,
             'expectedDependencies' => [],
         ];
 
@@ -151,14 +139,12 @@ class SourceMappingUrlsCompilerTest extends TestCase
                 .class {
                   color: green; /*# sourceMappingURL=sourceMappingURL-not-at-start.css.map */
                 }
-                EOF
-            ,
+                EOF,
             'expectedOutput' => <<<EOF
                 .class {
                   color: green; /*# sourceMappingURL=sourceMappingURL-not-at-start.css.map */
                 }
-                EOF
-            ,
+                EOF,
             'expectedDependencies' => [],
         ];
     }
