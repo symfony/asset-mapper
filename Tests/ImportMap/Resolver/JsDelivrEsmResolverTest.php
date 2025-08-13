@@ -487,8 +487,7 @@ class JsDelivrEsmResolverTest extends TestCase
                         url("data:will-be-ignored") format("woff-fake-data-format"),
                         url("data:https://example.com/will-be-ignored") format("woff-fake-absolute-url"),
                         .bi::before,[class*=" bi-"]::before,[class^=bi-]::before{display:inline-block;font-family:bootstrap-icons!important;font-style:normal;font-weight:400!important;font-variant:normal;text-transform:none;
-                    EOF
-                ,
+                    EOF,
             ],
             [
                 'url' => '/npm/bootstrap-icons@1.1.1/font/fonts/bootstrap-icons.woff2',

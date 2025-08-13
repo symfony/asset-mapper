@@ -61,14 +61,12 @@ class CssAssetUrlCompilerTest extends TestCase
                 body {
                     background: url("images/foo.png");
                 }
-                EOF
-            ,
+                EOF,
             'expectedOutput' => <<<EOF
                 body {
                     background: url("images/foo.123456.png");
                 }
-                EOF
-            ,
+                EOF,
             'expectedDependencies' => ['images/foo.png'],
         ];
 
