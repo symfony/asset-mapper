@@ -20,7 +20,7 @@ use Symfony\Component\Filesystem\Path;
 /**
  * Resolves url() paths in CSS files.
  *
- * Originally sourced from https://github.com/rails/propshaft/blob/main/lib/propshaft/compilers/css_asset_urls.rb
+ * Originally sourced from https://github.com/rails/propshaft/blob/main/lib/propshaft/compiler/css_asset_urls.rb
  */
 final class CssAssetUrlCompiler implements AssetCompilerInterface
 {
@@ -51,7 +51,7 @@ final class CssAssetUrlCompiler implements AssetCompilerInterface
         return preg_replace_callback(self::ASSET_URL_PATTERN, function ($matches) use ($asset, $assetMapper, $commentBlocks) {
             $matchPos = $matches[0][1];
 
-            // Ignore matchs inside comments
+            // Ignore matches inside comments
             foreach ($commentBlocks as $block) {
                 if ($matchPos > $block[0]) {
                     if ($matchPos < $block[1]) {
