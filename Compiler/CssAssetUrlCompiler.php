@@ -20,7 +20,7 @@ use Symfony\Component\Filesystem\Path;
 /**
  * Resolves url() paths in CSS files.
  *
- * Originally sourced from https://github.com/rails/propshaft/blob/main/lib/propshaft/compilers/css_asset_urls.rb
+ * Originally sourced from https://github.com/rails/propshaft/blob/main/lib/propshaft/compiler/css_asset_urls.rb
  */
 final class CssAssetUrlCompiler implements AssetCompilerInterface
 {
