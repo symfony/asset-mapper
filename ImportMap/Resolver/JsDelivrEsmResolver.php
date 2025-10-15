@@ -318,7 +318,7 @@ final class JsDelivrEsmResolver implements PackageResolverInterface
         }
 
         preg_match_all(CssAssetUrlCompiler::ASSET_URL_PATTERN, $content, $matches);
-        foreach ($matches[1] as $path) {
+        foreach ($matches[2] as $path) {
             if (str_starts_with($path, 'data:')) {
                 continue;
             }
