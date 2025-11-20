@@ -366,6 +366,34 @@ class ImportMapManagerTest extends TestCase
         ];
     }
 
+    public function testUpdatePreservesEntrypointStatus()
+    {
+        $manager = $this->createImportMapManager();
+
+        $this->mockImportMap([
+            self::createRemoteEntry('my_entrypoint', version: '1.0.0', isEntrypoint: true),
+            self::createRemoteEntry('standard_lib', version: '2.0.0', isEntrypoint: false),
+        ]);
+
+        $this->packageResolver->expects($this->once())
+            ->method('resolvePackages')
+            ->willReturn([
+                self::resolvedPackage('my_entrypoint', '1.0.1', isEntrypoint: true),
+                self::resolvedPackage('standard_lib', '2.1.0'),
+            ]);
+
+        $this->configReader->expects($this->once())
+            ->method('writeEntries')
+            ->with($this->callback(function (ImportMapEntries $entries) {
+                $this->assertTrue($entries->get('my_entrypoint')->isEntrypoint, 'Entrypoint status lost!');
+                $this->assertFalse($entries->get('standard_lib')->isEntrypoint);
+
+                return true;
+            }));
+
+        $manager->update();
+    }
+
     private function createImportMapManager(): ImportMapManager
     {
         $this->assetMapper = $this->createMock(AssetMapperInterface::class);
@@ -390,10 +418,10 @@ class ImportMapManagerTest extends TestCase
         );
     }
 
-    private static function resolvedPackage(string $packageName, string $version, ImportMapType $type = ImportMapType::JS)
+    private static function resolvedPackage(string $packageName, string $version, ImportMapType $type = ImportMapType::JS, bool $isEntrypoint = false)
     {
         return new ResolvedImportMapPackage(
-            new PackageRequireOptions($packageName),
+            new PackageRequireOptions($packageName, entrypoint: $isEntrypoint),
             $version,
             $type,
         );
@@ -421,11 +449,11 @@ class ImportMapManagerTest extends TestCase
         return ImportMapEntry::createLocal($importName, $type, path: $path, isEntrypoint: $isEntrypoint);
     }
 
-    private static function createRemoteEntry(string $importName, string $version, ?string $path = null, ImportMapType $type = ImportMapType::JS, ?string $packageSpecifier = null): ImportMapEntry
+    private static function createRemoteEntry(string $importName, string $version, ?string $path = null, ImportMapType $type = ImportMapType::JS, ?string $packageSpecifier = null, bool $isEntrypoint = false): ImportMapEntry
     {
         $packageSpecifier = $packageSpecifier ?? $importName;
         $path = $path ?? '/vendor/any-path.js';
 
-        return ImportMapEntry::createRemote($importName, $type, path: $path, version: $version, packageModuleSpecifier: $packageSpecifier, isEntrypoint: false);
+        return ImportMapEntry::createRemote($importName, $type, path: $path, version: $version, packageModuleSpecifier: $packageSpecifier, isEntrypoint: $isEntrypoint);
     }
 }
