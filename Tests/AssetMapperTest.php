@@ -60,7 +60,7 @@ class AssetMapperTest extends TestCase
 
         $this->mappedAssetFactory->expects($this->exactly(8))
             ->method('createMappedAsset')
-            ->willReturnCallback(function (string $logicalPath, string $filePath) {
+            ->willReturnCallback(static function (string $logicalPath, string $filePath) {
                 $asset = new MappedAsset($logicalPath, publicPath: '/final-assets/'.$logicalPath);
 
                 return $asset;

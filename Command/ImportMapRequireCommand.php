@@ -131,7 +131,7 @@ final class ImportMapRequireCommand extends Command
 
         $this->renderVersionProblems($this->importMapVersionChecker, $output);
 
-        $newPackageNames = array_map(fn (ImportMapEntry $package): string => $package->importName, $newPackages);
+        $newPackageNames = array_map(static fn (ImportMapEntry $package): string => $package->importName, $newPackages);
 
         if (1 === \count($newPackages)) {
             $messages = [\sprintf('Package "%s" added to importmap.php.', $newPackageNames[0])];

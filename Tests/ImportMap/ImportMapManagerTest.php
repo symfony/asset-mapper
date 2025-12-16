@@ -59,7 +59,7 @@ class ImportMapManagerTest extends TestCase
 
         $this->assetMapper->expects($this->any())
             ->method('getAssetFromSourcePath')
-            ->willReturnCallback(function (string $sourcePath) {
+            ->willReturnCallback(static function (string $sourcePath) {
                 if (str_ends_with($sourcePath, 'some_file.js')) {
                     // physical file we point to in one test
                     return new MappedAsset('some_file.js', $sourcePath);
@@ -71,7 +71,7 @@ class ImportMapManagerTest extends TestCase
 
         $this->configReader->expects($this->any())
             ->method('convertPathToFilesystemPath')
-            ->willReturnCallback(function ($path) {
+            ->willReturnCallback(static function ($path) {
                 if (str_ends_with($path, 'some_file.js')) {
                     return '/path/to/assets/some_file.js';
                 }
@@ -80,7 +80,7 @@ class ImportMapManagerTest extends TestCase
             });
         $this->configReader->expects($this->any())
             ->method('convertFilesystemPathToPath')
-            ->willReturnCallback(function ($path) {
+            ->willReturnCallback(static function ($path) {
                 return match ($path) {
                     '/path/to/assets/some_file.js' => './assets/some_file.js',
                     default => throw new \Exception(\sprintf('Unexpected path "%s"', $path)),
@@ -124,7 +124,7 @@ class ImportMapManagerTest extends TestCase
 
         $this->packageResolver->expects($this->exactly(0 === $expectedProviderPackageArgumentCount ? 0 : 1))
             ->method('resolvePackages')
-            ->with($this->callback(function (array $packages) use ($expectedProviderPackageArgumentCount) {
+            ->with($this->callback(static function (array $packages) use ($expectedProviderPackageArgumentCount) {
                 return \count($packages) === $expectedProviderPackageArgumentCount;
             }))
             ->willReturn($resolvedPackages)
@@ -320,12 +320,12 @@ class ImportMapManagerTest extends TestCase
         $this->assertIsArray($parsed);
 
         // remove integer keys - they're noise
-        $parsed = array_filter($parsed, fn ($key) => !\is_int($key), \ARRAY_FILTER_USE_KEY);
+        $parsed = array_filter($parsed, static fn ($key) => !\is_int($key), \ARRAY_FILTER_USE_KEY);
         $this->assertEquals($expectedReturn, $parsed);
 
         $parsedWithAlias = ImportMapManager::parsePackageName($packageName.'=some_alias');
         $this->assertIsArray($parsedWithAlias);
-        $parsedWithAlias = array_filter($parsedWithAlias, fn ($key) => !\is_int($key), \ARRAY_FILTER_USE_KEY);
+        $parsedWithAlias = array_filter($parsedWithAlias, static fn ($key) => !\is_int($key), \ARRAY_FILTER_USE_KEY);
         $expectedReturnWithAlias = $expectedReturn + ['alias' => 'some_alias'];
         $this->assertEquals($expectedReturnWithAlias, $parsedWithAlias, 'Asserting with alias');
     }
@@ -401,7 +401,7 @@ class ImportMapManagerTest extends TestCase
         // mock this to behave like normal
         $this->configReader->expects($this->any())
             ->method('createRemoteEntry')
-            ->willReturnCallback(function (string $importName, ImportMapType $type, string $version, string $packageModuleSpecifier, bool $isEntrypoint) {
+            ->willReturnCallback(static function (string $importName, ImportMapType $type, string $version, string $packageModuleSpecifier, bool $isEntrypoint) {
                 $path = '/path/to/vendor/'.$packageModuleSpecifier.'.js';
 
                 return ImportMapEntry::createRemote($importName, $type, $path, $version, $packageModuleSpecifier, $isEntrypoint);

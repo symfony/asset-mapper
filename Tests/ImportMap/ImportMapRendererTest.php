@@ -63,7 +63,7 @@ class ImportMapRendererTest extends TestCase
         $assetPackages = $this->createMock(Packages::class);
         $assetPackages->expects($this->any())
             ->method('getUrl')
-            ->willReturnCallback(function ($path) {
+            ->willReturnCallback(static function ($path) {
                 // try to imitate the behavior of the real service
                 if (str_starts_with($path, 'http') || str_starts_with($path, '/')) {
                     return $path;

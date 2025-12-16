@@ -301,7 +301,7 @@ final class JsDelivrEsmResolver implements PackageResolverInterface
     private function makeImportsBare(string $content, array &$dependencies, array &$extraFiles, ImportMapType $type, string $sourceFilePath): string
     {
         if (ImportMapType::JS === $type) {
-            $content = preg_replace_callback(self::IMPORT_REGEX, function ($matches) use (&$dependencies) {
+            $content = preg_replace_callback(self::IMPORT_REGEX, static function ($matches) use (&$dependencies) {
                 $packageName = $matches[2].$matches[4]; // add the path if any
                 $dependencies[] = $packageName;
 
