@@ -29,7 +29,7 @@ class ImportMapUpdateCheckerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->importMapConfigReader = $this->createMock(ImportMapConfigReader::class);
+        $this->importMapConfigReader = $this->createStub(ImportMapConfigReader::class);
         $httpClient = new MockHttpClient();
         $httpClient->setResponseFactory(self::responseFactory(...));
         $this->updateChecker = new ImportMapUpdateChecker($this->importMapConfigReader, $httpClient);

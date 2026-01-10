@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\AssetMapper\Tests\Factory;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\AssetMapper\AssetMapperCompiler;
 use Symfony\Component\AssetMapper\AssetMapperInterface;
@@ -28,7 +27,7 @@ class MappedAssetFactoryTest extends TestCase
 {
     private const DEFAULT_FIXTURES = __DIR__.'/../Fixtures/assets/vendor';
 
-    private AssetMapperInterface&MockObject $assetMapper;
+    private AssetMapperInterface $assetMapper;
 
     public function testCreateMappedAsset()
     {
@@ -150,7 +149,7 @@ class MappedAssetFactoryTest extends TestCase
     private function createFactory(?AssetCompilerInterface $extraCompiler = null, ?string $vendorDir = self::DEFAULT_FIXTURES): MappedAssetFactory
     {
         $compilers = [
-            new JavaScriptImportPathCompiler($this->createMock(ImportMapConfigReader::class)),
+            new JavaScriptImportPathCompiler($this->createStub(ImportMapConfigReader::class)),
             new CssAssetUrlCompiler(),
         ];
         if ($extraCompiler) {
@@ -162,8 +161,8 @@ class MappedAssetFactoryTest extends TestCase
             fn () => $this->assetMapper,
         );
 
-        $pathResolver = $this->createMock(PublicAssetsPathResolverInterface::class);
-        $pathResolver->expects($this->any())
+        $pathResolver = $this->createStub(PublicAssetsPathResolverInterface::class);
+        $pathResolver
             ->method('resolvePublicPath')
             ->willReturnCallback(function (string $logicalPath) {
                 return '/final-assets/'.$logicalPath;
@@ -176,8 +175,8 @@ class MappedAssetFactoryTest extends TestCase
         );
 
         // mock the AssetMapper to behave like normal: by calling back to the factory
-        $this->assetMapper = $this->createMock(AssetMapperInterface::class);
-        $this->assetMapper->expects($this->any())
+        $this->assetMapper = $this->createStub(AssetMapperInterface::class);
+        $this->assetMapper
             ->method('getAssetFromSourcePath')
             ->willReturnCallback(function (string $sourcePath) use ($factory) {
                 if (str_contains($sourcePath, 'dir1')) {
