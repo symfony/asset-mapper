@@ -37,7 +37,7 @@ class ImportMapRequireCommandTest extends KernelTestCase
      */
     public function testDryRunOptionToShowInformationBeforeApplyInstallation(int $verbosity, array $packageEntries, array $packagesToInstall, string $expected, ?string $path = null)
     {
-        $importMapManager = $this->createMock(ImportMapManager::class);
+        $importMapManager = $this->createStub(ImportMapManager::class);
         $importMapManager
             ->method('requirePackages')
             ->willReturn($packageEntries)
@@ -45,7 +45,7 @@ class ImportMapRequireCommandTest extends KernelTestCase
 
         $command = new ImportMapRequireCommand(
             $importMapManager,
-            $this->createMock(ImportMapVersionChecker::class),
+            $this->createStub(ImportMapVersionChecker::class),
             '/path/to/project/dir',
         );
 
