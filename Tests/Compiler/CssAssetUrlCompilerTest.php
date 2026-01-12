@@ -13,7 +13,7 @@ namespace Symfony\Component\AssetMapper\Tests\Compiler;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\AssetMapper\AssetMapperInterface;
 use Symfony\Component\AssetMapper\Compiler\AssetCompilerInterface;
 use Symfony\Component\AssetMapper\Compiler\CssAssetUrlCompiler;
@@ -24,8 +24,8 @@ class CssAssetUrlCompilerTest extends TestCase
     #[DataProvider('provideCompileTests')]
     public function testCompile(string $input, string $expectedOutput, array $expectedDependencies)
     {
-        $assetMapper = $this->createMock(AssetMapperInterface::class);
-        $assetMapper->expects($this->any())
+        $assetMapper = $this->createStub(AssetMapperInterface::class);
+        $assetMapper
             ->method('getAssetFromSourcePath')
             ->willReturnCallback(static function ($path) {
                 return match ($path) {
@@ -219,8 +219,8 @@ class CssAssetUrlCompilerTest extends TestCase
 
     public function testCompileFindsRelativeFilesViaSourcePath()
     {
-        $assetMapper = $this->createMock(AssetMapperInterface::class);
-        $assetMapper->expects($this->any())
+        $assetMapper = $this->createStub(AssetMapperInterface::class);
+        $assetMapper
             ->method('getAssetFromSourcePath')
             ->willReturnCallback(static function ($path) {
                 return match ($path) {
@@ -263,8 +263,8 @@ class CssAssetUrlCompilerTest extends TestCase
 
         $asset = new MappedAsset($sourceLogicalName, '/path/to/styles.css');
 
-        $compiler = new CssAssetUrlCompiler(AssetCompilerInterface::MISSING_IMPORT_STRICT, $this->createMock(LoggerInterface::class));
-        $this->assertSame($input, $compiler->compile($input, $asset, $this->createMock(AssetMapperInterface::class)));
+        $compiler = new CssAssetUrlCompiler(AssetCompilerInterface::MISSING_IMPORT_STRICT, new NullLogger());
+        $this->assertSame($input, $compiler->compile($input, $asset, $this->createStub(AssetMapperInterface::class)));
     }
 
     public static function provideStrictModeTests(): iterable

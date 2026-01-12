@@ -27,7 +27,7 @@ class MapperAwareAssetPackageTest extends TestCase
             ->with('foo')
             ->willReturn('2.0');
 
-        $assetMapperPackage = new MapperAwareAssetPackage($inner, $this->createMock(AssetMapperInterface::class));
+        $assetMapperPackage = new MapperAwareAssetPackage($inner, $this->createStub(AssetMapperInterface::class));
 
         $this->assertSame('2.0', $assetMapperPackage->getVersion('foo'));
     }
@@ -42,8 +42,8 @@ class MapperAwareAssetPackageTest extends TestCase
             ->willReturnCallback(static function ($path) {
                 return '/'.$path;
             });
-        $assetMapper = $this->createMock(AssetMapperInterface::class);
-        $assetMapper->expects($this->any())
+        $assetMapper = $this->createStub(AssetMapperInterface::class);
+        $assetMapper
             ->method('getPublicPath')
             ->willReturnCallback(static function ($path) {
                 switch ($path) {
