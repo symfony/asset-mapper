@@ -63,8 +63,8 @@ class ImportMapConfigReaderTest extends TestCase
             EOF;
         file_put_contents(__DIR__.'/../Fixtures/importmap_config_reader/importmap.php', $importMap);
 
-        $remotePackageStorage = $this->createMock(RemotePackageStorage::class);
-        $remotePackageStorage->expects($this->any())
+        $remotePackageStorage = $this->createStub(RemotePackageStorage::class);
+        $remotePackageStorage
             ->method('getDownloadPath')
             ->willReturnCallback(static function (string $packageModuleSpecifier, ImportMapType $type) {
                 return '/path/to/vendor/'.$packageModuleSpecifier.'.'.$type->value;
@@ -110,7 +110,7 @@ class ImportMapConfigReaderTest extends TestCase
     #[DataProvider('getPathToFilesystemPathTests')]
     public function testConvertPathToFilesystemPath(string $path, string $expectedPath)
     {
-        $configReader = new ImportMapConfigReader(realpath(__DIR__.'/../Fixtures/importmap.php'), $this->createMock(RemotePackageStorage::class));
+        $configReader = new ImportMapConfigReader(realpath(__DIR__.'/../Fixtures/importmap.php'), new RemotePackageStorage(sys_get_temp_dir()));
         // normalize path separators for comparison
         $expectedPath = str_replace('\\', '/', $expectedPath);
         $this->assertSame($expectedPath, $configReader->convertPathToFilesystemPath($path));
@@ -132,7 +132,7 @@ class ImportMapConfigReaderTest extends TestCase
     #[DataProvider('getFilesystemPathToPathTests')]
     public function testConvertFilesystemPathToPath(string $path, ?string $expectedPath)
     {
-        $configReader = new ImportMapConfigReader(__DIR__.'/../Fixtures/importmap.php', $this->createMock(RemotePackageStorage::class));
+        $configReader = new ImportMapConfigReader(__DIR__.'/../Fixtures/importmap.php', new RemotePackageStorage(sys_get_temp_dir()));
         $this->assertSame($expectedPath, $configReader->convertFilesystemPathToPath($path));
     }
 
@@ -151,7 +151,7 @@ class ImportMapConfigReaderTest extends TestCase
 
     public function testFindRootImportMapEntry()
     {
-        $configReader = new ImportMapConfigReader(__DIR__.'/../Fixtures/importmap.php', $this->createMock(RemotePackageStorage::class));
+        $configReader = new ImportMapConfigReader(__DIR__.'/../Fixtures/importmap.php', new RemotePackageStorage(sys_get_temp_dir()));
         $entry = $configReader->findRootImportMapEntry('file2');
         $this->assertSame('file2', $entry->importName);
         $this->assertSame('file2.js', $entry->path);
