@@ -28,10 +28,10 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ImportMapManagerTest extends TestCase
 {
-    private AssetMapperInterface&MockObject $assetMapper;
-    private PackageResolverInterface&MockObject $packageResolver;
+    private AssetMapperInterface $assetMapper;
+    private PackageResolverInterface $packageResolver;
     private ImportMapConfigReader&MockObject $configReader;
-    private RemotePackageDownloader&MockObject $remotePackageDownloader;
+    private RemotePackageDownloader $remotePackageDownloader;
 
     private Filesystem $filesystem;
     private static string $writableRoot = __DIR__.'/../Fixtures/importmap_manager';
@@ -54,11 +54,12 @@ class ImportMapManagerTest extends TestCase
      */
     public function testRequire(array $packages, int $expectedProviderPackageArgumentCount, array $resolvedPackages, array $expectedImportMap)
     {
+        $this->packageResolver = $this->createMock(PackageResolverInterface::class);
         $manager = $this->createImportMapManager();
         // physical file we point to in one test
         $this->writeFile('assets/some_file.js', 'some file contents');
 
-        $this->assetMapper->expects($this->any())
+        $this->assetMapper
             ->method('getAssetFromSourcePath')
             ->willReturnCallback(function (string $sourcePath) {
                 if (str_ends_with($sourcePath, 'some_file.js')) {
@@ -237,6 +238,7 @@ class ImportMapManagerTest extends TestCase
 
     public function testUpdateAll()
     {
+        $this->packageResolver = $this->createMock(PackageResolverInterface::class);
         $manager = $this->createImportMapManager();
         $this->mockImportMap([
             self::createRemoteEntry('lodash', version: '1.2.3', path: '/vendor/lodash.js'),
@@ -248,7 +250,7 @@ class ImportMapManagerTest extends TestCase
             ->method('resolvePackages')
             ->with($this->callback(function ($packages) {
                 $this->assertInstanceOf(PackageRequireOptions::class, $packages[0]);
-                /** @var PackageRequireOptions[] $packages */
+                /* @var PackageRequireOptions[] $packages */
                 $this->assertCount(2, $packages);
 
                 $this->assertSame('lodash', $packages[0]->packageModuleSpecifier);
@@ -282,6 +284,8 @@ class ImportMapManagerTest extends TestCase
 
     public function testUpdateWithSpecificPackages()
     {
+        $this->packageResolver = $this->createMock(PackageResolverInterface::class);
+        $this->remotePackageDownloader = $this->createMock(RemotePackageDownloader::class);
         $manager = $this->createImportMapManager();
         $this->mockImportMap([
             self::createRemoteEntry('lodash', version: '1.2.3'),
@@ -368,6 +372,7 @@ class ImportMapManagerTest extends TestCase
 
     public function testUpdatePreservesEntrypointStatus()
     {
+        $this->packageResolver = $this->createMock(PackageResolverInterface::class);
         $manager = $this->createImportMapManager();
 
         $this->mockImportMap([
@@ -396,10 +401,10 @@ class ImportMapManagerTest extends TestCase
 
     private function createImportMapManager(): ImportMapManager
     {
-        $this->assetMapper = $this->createMock(AssetMapperInterface::class);
+        $this->assetMapper = $this->createStub(AssetMapperInterface::class);
         $this->configReader = $this->createMock(ImportMapConfigReader::class);
-        $this->packageResolver = $this->createMock(PackageResolverInterface::class);
-        $this->remotePackageDownloader = $this->createMock(RemotePackageDownloader::class);
+        $this->packageResolver ??= $this->createStub(PackageResolverInterface::class);
+        $this->remotePackageDownloader ??= $this->createStub(RemotePackageDownloader::class);
 
         // mock this to behave like normal
         $this->configReader->expects($this->any())

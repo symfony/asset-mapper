@@ -23,8 +23,8 @@ class SourceMappingUrlsCompilerTest extends TestCase
      */
     public function testCompile(string $sourceLogicalName, string $input, string $expectedOutput, $expectedDependencies)
     {
-        $assetMapper = $this->createMock(AssetMapperInterface::class);
-        $assetMapper->expects($this->any())
+        $assetMapper = $this->createStub(AssetMapperInterface::class);
+        $assetMapper
             ->method('getAssetFromSourcePath')
             ->willReturnCallback(function ($path) {
                 return match ($path) {
