@@ -45,9 +45,8 @@ final class GzipCompressor implements SupportedCompressorInterface
             $this->zopfliCompressor->compress($path);
 
             return;
-        } else {
-            $this->logger?->warning($reason);
         }
+        $this->logger?->warning($reason);
 
         $this->baseCompress($path);
     }
