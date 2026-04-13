@@ -66,9 +66,7 @@ class ImportMapConfigReaderTest extends TestCase
         $remotePackageStorage = $this->createStub(RemotePackageStorage::class);
         $remotePackageStorage
             ->method('getDownloadPath')
-            ->willReturnCallback(static function (string $packageModuleSpecifier, ImportMapType $type) {
-                return '/path/to/vendor/'.$packageModuleSpecifier.'.'.$type->value;
-            });
+            ->willReturnCallback(static fn (string $packageModuleSpecifier, ImportMapType $type) => '/path/to/vendor/'.$packageModuleSpecifier.'.'.$type->value);
         $reader = new ImportMapConfigReader(
             __DIR__.'/../Fixtures/importmap_config_reader/importmap.php',
             $remotePackageStorage,
