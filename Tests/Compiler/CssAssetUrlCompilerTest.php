@@ -28,7 +28,7 @@ class CssAssetUrlCompilerTest extends TestCase
         $assetMapper = $this->createStub(AssetMapperInterface::class);
         $assetMapper
             ->method('getAssetFromSourcePath')
-            ->willReturnCallback(function ($path) {
+            ->willReturnCallback(static function ($path) {
                 return match ($path) {
                     '/project/assets/images/foo.png' => new MappedAsset('images/foo.png',
                         publicPathWithoutDigest: '/assets/images/foo.png',
@@ -45,7 +45,7 @@ class CssAssetUrlCompilerTest extends TestCase
         $compiler = new CssAssetUrlCompiler();
         $asset = new MappedAsset('styles.css', '/project/assets/styles.css', '/assets/styles.css');
         $this->assertSame($expectedOutput, $compiler->compile($input, $asset, $assetMapper));
-        $assetDependencyLogicalPaths = array_map(fn (MappedAsset $dependency) => $dependency->logicalPath, $asset->getDependencies());
+        $assetDependencyLogicalPaths = array_map(static fn (MappedAsset $dependency) => $dependency->logicalPath, $asset->getDependencies());
         $this->assertSame($expectedDependencies, $assetDependencyLogicalPaths);
     }
 
@@ -223,7 +223,7 @@ class CssAssetUrlCompilerTest extends TestCase
         $assetMapper = $this->createStub(AssetMapperInterface::class);
         $assetMapper
             ->method('getAssetFromSourcePath')
-            ->willReturnCallback(function ($path) {
+            ->willReturnCallback(static function ($path) {
                 return match ($path) {
                     '/project/assets/images/foo.png' => new MappedAsset('images/foo.png',
                         publicPathWithoutDigest: '/assets/images/foo.png',

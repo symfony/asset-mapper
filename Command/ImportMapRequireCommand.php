@@ -120,7 +120,7 @@ final class ImportMapRequireCommand extends Command
 
             $message .= '.';
         } else {
-            $names = array_map(fn (ImportMapEntry $package) => $package->importName, $newPackages);
+            $names = array_map(static fn (ImportMapEntry $package) => $package->importName, $newPackages);
             $message = \sprintf('%d new items (%s) added to the importmap.php!', \count($newPackages), implode(', ', $names));
         }
 

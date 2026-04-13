@@ -55,7 +55,7 @@ class RemotePackageDownloaderTest extends TestCase
             ->method('getEntries')
             ->willReturn($importMapEntries);
 
-        $progressCallback = fn () => null;
+        $progressCallback = static fn () => null;
         $packageResolver->expects($this->once())
             ->method('downloadPackages')
             ->with(
@@ -116,13 +116,13 @@ class RemotePackageDownloaderTest extends TestCase
 
         // matches installed version and file exists
         $entry1 = ImportMapEntry::createRemote('foo', ImportMapType::JS, path: '/any', version: '1.0.0', packageModuleSpecifier: 'foo', isEntrypoint: false);
-        @mkdir(self::$writableRoot.'/assets/vendor/foo', 0777, true);
+        @mkdir(self::$writableRoot.'/assets/vendor/foo', 0o777, true);
         file_put_contents(self::$writableRoot.'/assets/vendor/foo/foo.index.js', 'original foo content');
         // matches installed version but file does not exist
         $entry2 = ImportMapEntry::createRemote('bar.js/file', ImportMapType::JS, path: '/any', version: '1.0.0', packageModuleSpecifier: 'bar.js/file', isEntrypoint: false);
         // does not match installed version
         $entry3 = ImportMapEntry::createRemote('baz', ImportMapType::CSS, path: '/any', version: '1.1.0', packageModuleSpecifier: 'baz', isEntrypoint: false);
-        @mkdir(self::$writableRoot.'/assets/vendor/baz', 0777, true);
+        @mkdir(self::$writableRoot.'/assets/vendor/baz', 0o777, true);
         file_put_contents(self::$writableRoot.'/assets/vendor/baz/baz.index.css', 'original baz content');
         // matches installed & file exists, but has missing extra file
         $entry4 = ImportMapEntry::createRemote('has-missing-extra', ImportMapType::JS, path: '/any', version: '1.0.0', packageModuleSpecifier: 'has-missing-extra', isEntrypoint: false);

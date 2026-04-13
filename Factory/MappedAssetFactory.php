@@ -118,7 +118,7 @@ class MappedAssetFactory implements MappedAssetFactoryInterface
             return $this->assetsPathResolver->resolvePublicPath($asset->logicalPath);
         }
 
-        $digestedPath = preg_replace_callback('/\.(\w+)$/', fn ($matches) => "-{$digest}{$matches[0]}", $asset->logicalPath);
+        $digestedPath = preg_replace_callback('/\.(\w+)$/', static fn ($matches) => "-{$digest}{$matches[0]}", $asset->logicalPath);
 
         return $this->assetsPathResolver->resolvePublicPath($digestedPath);
     }

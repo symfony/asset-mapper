@@ -171,7 +171,7 @@ class ImportMapRenderer
 
     private function addWebLinkPreloads(Request $request, array $cssLinks): void
     {
-        $cssPreloadLinks = array_map(fn ($url) => (new Link('preload', $url))->withAttribute('as', 'style'), $cssLinks);
+        $cssPreloadLinks = array_map(static fn ($url) => (new Link('preload', $url))->withAttribute('as', 'style'), $cssLinks);
 
         if (null === $linkProvider = $request->attributes->get('_links')) {
             $request->attributes->set('_links', new GenericLinkProvider($cssPreloadLinks));

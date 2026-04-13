@@ -31,7 +31,7 @@ final class SourceMappingUrlsCompiler implements AssetCompilerInterface
 
     public function compile(string $content, MappedAsset $asset, AssetMapperInterface $assetMapper): string
     {
-        return preg_replace_callback(self::SOURCE_MAPPING_PATTERN, function ($matches) use ($asset, $assetMapper) {
+        return preg_replace_callback(self::SOURCE_MAPPING_PATTERN, static function ($matches) use ($asset, $assetMapper) {
             $resolvedPath = Path::join(\dirname($asset->sourcePath), $matches[2]);
 
             $dependentAsset = $assetMapper->getAssetFromSourcePath($resolvedPath);

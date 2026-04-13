@@ -46,7 +46,7 @@ class RemotePackageStorageTest extends TestCase
         $vendorDir = self::$writableRoot.'/assets/acme/vendor';
         $this->filesystem->mkdir($vendorDir.'/module_specifier');
         $this->filesystem->touch($vendorDir.'/module_specifier/module_specifier.index.js');
-        $this->filesystem->chmod($vendorDir.'/module_specifier/module_specifier.index.js', 0555);
+        $this->filesystem->chmod($vendorDir.'/module_specifier/module_specifier.index.js', 0o555);
 
         $storage = new RemotePackageStorage($vendorDir);
         $entry = ImportMapEntry::createRemote('foo', ImportMapType::JS, '/does/not/matter', '1.0.0', 'module_specifier', false);
@@ -57,7 +57,7 @@ class RemotePackageStorageTest extends TestCase
         try {
             $storage->save($entry, 'any content');
         } finally {
-            $this->filesystem->chmod($vendorDir.'/module_specifier/module_specifier.index.js', 0777);
+            $this->filesystem->chmod($vendorDir.'/module_specifier/module_specifier.index.js', 0o777);
         }
     }
 

@@ -53,7 +53,7 @@ class RemotePackageStorage
 
         $vendorPath = $this->getDownloadPath($entry->packageModuleSpecifier, $entry->type);
 
-        @mkdir(\dirname($vendorPath), 0777, true);
+        @mkdir(\dirname($vendorPath), 0o777, true);
         if (false === @file_put_contents($vendorPath, $contents)) {
             throw new RuntimeException(error_get_last()['message'] ?? \sprintf('Failed to write file "%s".', $vendorPath));
         }
@@ -67,7 +67,7 @@ class RemotePackageStorage
 
         $vendorPath = $this->getExtraFileDownloadPath($entry, $extraFilename);
 
-        @mkdir(\dirname($vendorPath), 0777, true);
+        @mkdir(\dirname($vendorPath), 0o777, true);
         if (false === @file_put_contents($vendorPath, $contents)) {
             throw new RuntimeException(error_get_last()['message'] ?? \sprintf('Failed to write file "%s".', $vendorPath));
         }
