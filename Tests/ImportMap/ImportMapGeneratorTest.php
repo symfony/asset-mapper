@@ -262,7 +262,7 @@ class ImportMapGeneratorTest extends TestCase
         $this->mockAssetMapper($mappedAssets);
         $this->configReader
             ->method('convertPathToFilesystemPath')
-            ->willReturnCallback(function (string $path) {
+            ->willReturnCallback(static function (string $path) {
                 if (!str_starts_with($path, '.')) {
                     return $path;
                 }
@@ -716,7 +716,7 @@ class ImportMapGeneratorTest extends TestCase
         // mock this to behave like normal
         $this->configReader
             ->method('createRemoteEntry')
-            ->willReturnCallback(function (string $importName, ImportMapType $type, string $version, string $packageModuleSpecifier, bool $isEntrypoint) {
+            ->willReturnCallback(static function (string $importName, ImportMapType $type, string $version, string $packageModuleSpecifier, bool $isEntrypoint) {
                 $path = '/path/to/vendor/'.$packageModuleSpecifier.'.js';
 
                 return ImportMapEntry::createRemote($importName, $type, $path, $version, $packageModuleSpecifier, $isEntrypoint);
@@ -757,7 +757,7 @@ class ImportMapGeneratorTest extends TestCase
     {
         $this->assetMapper
             ->method('getAsset')
-            ->willReturnCallback(function (string $logicalPath) use ($mappedAssets) {
+            ->willReturnCallback(static function (string $logicalPath) use ($mappedAssets) {
                 foreach ($mappedAssets as $asset) {
                     if ($asset->logicalPath === $logicalPath) {
                         return $asset;
@@ -770,9 +770,9 @@ class ImportMapGeneratorTest extends TestCase
 
         $this->assetMapper
             ->method('getAssetFromSourcePath')
-            ->willReturnCallback(function (string $sourcePath) use ($mappedAssets) {
+            ->willReturnCallback(static function (string $sourcePath) use ($mappedAssets) {
                 // collapse ../ in paths and ./ in paths to mimic the realpath AssetMapper uses
-                $unCollapsePath = function (string $path) {
+                $unCollapsePath = static function (string $path) {
                     $parts = explode('/', $path);
                     $newParts = [];
                     foreach ($parts as $part) {

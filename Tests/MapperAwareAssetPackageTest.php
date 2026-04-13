@@ -39,13 +39,13 @@ class MapperAwareAssetPackageTest extends TestCase
         $inner->expects($this->once())
             ->method('getUrl')
             ->with($expectedPathSentToInner)
-            ->willReturnCallback(function ($path) {
+            ->willReturnCallback(static function ($path) {
                 return '/'.$path;
             });
         $assetMapper = $this->createStub(AssetMapperInterface::class);
         $assetMapper
             ->method('getPublicPath')
-            ->willReturnCallback(function ($path) {
+            ->willReturnCallback(static function ($path) {
                 switch ($path) {
                     case 'images/foo.png':
                         return '/assets/images/foo.123456.png';

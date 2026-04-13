@@ -53,7 +53,7 @@ class RemotePackageDownloaderTest extends TestCase
             ->method('getEntries')
             ->willReturn($importMapEntries);
 
-        $progressCallback = fn () => null;
+        $progressCallback = static fn () => null;
         $packageResolver->expects($this->once())
             ->method('downloadPackages')
             ->with(
