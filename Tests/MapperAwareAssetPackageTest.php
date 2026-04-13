@@ -39,9 +39,7 @@ class MapperAwareAssetPackageTest extends TestCase
         $inner->expects($this->once())
             ->method('getUrl')
             ->with($expectedPathSentToInner)
-            ->willReturnCallback(static function ($path) {
-                return '/'.$path;
-            });
+            ->willReturnCallback(static fn ($path) => '/'.$path);
         $assetMapper = $this->createStub(AssetMapperInterface::class);
         $assetMapper
             ->method('getPublicPath')

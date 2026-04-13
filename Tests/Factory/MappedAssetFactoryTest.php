@@ -165,9 +165,7 @@ class MappedAssetFactoryTest extends TestCase
         $pathResolver = $this->createStub(PublicAssetsPathResolverInterface::class);
         $pathResolver
             ->method('resolvePublicPath')
-            ->willReturnCallback(static function (string $logicalPath) {
-                return '/final-assets/'.$logicalPath;
-            });
+            ->willReturnCallback(static fn (string $logicalPath) => '/final-assets/'.$logicalPath);
 
         $factory = new MappedAssetFactory(
             $pathResolver,

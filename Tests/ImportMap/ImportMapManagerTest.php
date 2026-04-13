@@ -125,9 +125,7 @@ class ImportMapManagerTest extends TestCase
 
         $this->packageResolver->expects($this->exactly(0 === $expectedProviderPackageArgumentCount ? 0 : 1))
             ->method('resolvePackages')
-            ->with($this->callback(static function (array $packages) use ($expectedProviderPackageArgumentCount) {
-                return \count($packages) === $expectedProviderPackageArgumentCount;
-            }))
+            ->with($this->callback(static fn (array $packages) => \count($packages) === $expectedProviderPackageArgumentCount))
             ->willReturn($resolvedPackages)
         ;
 
