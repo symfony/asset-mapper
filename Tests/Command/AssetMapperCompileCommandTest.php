@@ -65,7 +65,9 @@ class AssetMapperCompileCommandTest extends TestCase
             import '../file4.js';
             console.log('file5.js');
 
-            EOF, file_get_contents($targetBuildDir.'/subdir/file5-f4fdc37375c7f5f2629c5659a0579967.js'));
+            EOF,
+            file_get_contents($targetBuildDir.'/subdir/file5-f4fdc37375c7f5f2629c5659a0579967.js')
+        );
 
         $finder = new Finder();
         $finder->in($targetBuildDir)->files();
