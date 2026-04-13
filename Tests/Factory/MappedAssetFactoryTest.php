@@ -165,7 +165,7 @@ class MappedAssetFactoryTest extends TestCase
         $pathResolver = $this->createStub(PublicAssetsPathResolverInterface::class);
         $pathResolver
             ->method('resolvePublicPath')
-            ->willReturnCallback(function (string $logicalPath) {
+            ->willReturnCallback(static function (string $logicalPath) {
                 return '/final-assets/'.$logicalPath;
             });
 
@@ -179,7 +179,7 @@ class MappedAssetFactoryTest extends TestCase
         $this->assetMapper = $this->createStub(AssetMapperInterface::class);
         $this->assetMapper
             ->method('getAssetFromSourcePath')
-            ->willReturnCallback(function (string $sourcePath) use ($factory) {
+            ->willReturnCallback(static function (string $sourcePath) use ($factory) {
                 if (str_contains($sourcePath, 'dir1')) {
                     $logicalPath = substr($sourcePath, strpos($sourcePath, 'dir1') + 5);
                 } elseif (str_contains($sourcePath, 'dir2')) {
