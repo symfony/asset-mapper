@@ -126,9 +126,7 @@ class ImportMapManagerTest extends TestCase
 
         $this->packageResolver->expects($this->exactly(0 === $expectedProviderPackageArgumentCount ? 0 : 1))
             ->method('resolvePackages')
-            ->with($this->callback(static function (array $packages) use ($expectedProviderPackageArgumentCount) {
-                return \count($packages) === $expectedProviderPackageArgumentCount;
-            }))
+            ->with($this->callback(static fn (array $packages) => \count($packages) === $expectedProviderPackageArgumentCount))
             ->willReturn($resolvedPackages)
         ;
 
@@ -456,8 +454,8 @@ class ImportMapManagerTest extends TestCase
 
     private static function createRemoteEntry(string $importName, string $version, ?string $path = null, ImportMapType $type = ImportMapType::JS, ?string $packageSpecifier = null, bool $isEntrypoint = false): ImportMapEntry
     {
-        $packageSpecifier = $packageSpecifier ?? $importName;
-        $path = $path ?? '/vendor/any-path.js';
+        $packageSpecifier ??= $importName;
+        $path ??= '/vendor/any-path.js';
 
         return ImportMapEntry::createRemote($importName, $type, path: $path, version: $version, packageModuleSpecifier: $packageSpecifier, isEntrypoint: $isEntrypoint);
     }

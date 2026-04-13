@@ -207,7 +207,7 @@ class ImportMapUpdateCheckerTest extends TestCase
 
     private static function createRemoteEntry(string $importName, string $version, ImportMapType $type = ImportMapType::JS, ?string $packageSpecifier = null): ImportMapEntry
     {
-        $packageSpecifier = $packageSpecifier ?? $importName;
+        $packageSpecifier ??= $importName;
 
         return ImportMapEntry::createRemote($importName, $type, path: '/vendor/any-path.js', version: $version, packageModuleSpecifier: $packageSpecifier, isEntrypoint: false);
     }
