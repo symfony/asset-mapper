@@ -45,34 +45,34 @@ final class ImportMapRequireCommand extends Command
             ->addOption('entrypoint', null, InputOption::VALUE_NONE, 'Make the package(s) an entrypoint?')
             ->addOption('path', null, InputOption::VALUE_REQUIRED, 'The local path where the package lives relative to the project root')
             ->setHelp(<<<'EOT'
-The <info>%command.name%</info> command adds packages to <comment>importmap.php</comment> usually
-by finding a CDN URL for the given package and version.
+                The <info>%command.name%</info> command adds packages to <comment>importmap.php</comment> usually
+                by finding a CDN URL for the given package and version.
 
-For example:
+                For example:
 
-    <info>php %command.full_name% lodash</info>
-    <info>php %command.full_name% "lodash@^4.15"</info>
+                    <info>php %command.full_name% lodash</info>
+                    <info>php %command.full_name% "lodash@^4.15"</info>
 
-You can also require specific paths of a package:
+                You can also require specific paths of a package:
 
-    <info>php %command.full_name% "chart.js/auto"</info>
+                    <info>php %command.full_name% "chart.js/auto"</info>
 
-Or require one package/file, but alias its name in your import map:
+                Or require one package/file, but alias its name in your import map:
 
-    <info>php %command.full_name% "vue/dist/vue.esm-bundler.js=vue"</info>
+                    <info>php %command.full_name% "vue/dist/vue.esm-bundler.js=vue"</info>
 
-Sometimes, a package may require other packages and multiple new items may be added
-to the import map.
+                Sometimes, a package may require other packages and multiple new items may be added
+                to the import map.
 
-You can also require multiple packages at once:
+                You can also require multiple packages at once:
 
-    <info>php %command.full_name% "lodash@^4.15" "@hotwired/stimulus"</info>
+                    <info>php %command.full_name% "lodash@^4.15" "@hotwired/stimulus"</info>
 
-To add an importmap entry pointing to a local file, use the <info>path</info> option:
+                To add an importmap entry pointing to a local file, use the <info>path</info> option:
 
-    <info>php %command.full_name% "any_module_name" --path=./assets/some_file.js</info>
+                    <info>php %command.full_name% "any_module_name" --path=./assets/some_file.js</info>
 
-EOT
+                EOT
             );
     }
 
