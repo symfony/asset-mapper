@@ -466,7 +466,7 @@ class ImportMapManagerTest extends TestCase
 
     private static function createLocalEntry(string $importName, string $path, ImportMapType $type = ImportMapType::JS, bool $isEntrypoint = false): ImportMapEntry
     {
-        return ImportMapEntry::createLocal($importName, $type, path: $path, isEntrypoint: $isEntrypoint);
+        return ImportMapEntry::createLocal($importName, $type, $path, $isEntrypoint);
     }
 
     private static function createRemoteEntry(string $importName, string $version, ?string $path = null, ImportMapType $type = ImportMapType::JS, ?string $packageSpecifier = null, bool $isEntrypoint = false): ImportMapEntry
@@ -474,6 +474,6 @@ class ImportMapManagerTest extends TestCase
         $packageSpecifier ??= $importName;
         $path ??= '/vendor/any-path.js';
 
-        return ImportMapEntry::createRemote($importName, $type, path: $path, version: $version, packageModuleSpecifier: $packageSpecifier, isEntrypoint: $isEntrypoint);
+        return ImportMapEntry::createRemote($importName, $type, $path, $version, $packageSpecifier, $isEntrypoint);
     }
 }
