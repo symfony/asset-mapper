@@ -349,6 +349,14 @@ class ImportMapManagerTest extends TestCase
             ],
         ];
 
+        yield 'with_version_constraint_containing_spaces' => [
+            'lodash@^1.2.3 || ^2.0',
+            [
+                'package' => 'lodash',
+                'version' => '^1.2.3 || ^2.0',
+            ],
+        ];
+
         yield 'namespaced_package_simple' => [
             '@hotwired/stimulus',
             [
@@ -361,6 +369,22 @@ class ImportMapManagerTest extends TestCase
             [
                 'package' => '@hotwired/stimulus',
                 'version' => '^1.2.3',
+            ],
+        ];
+
+        yield 'namespaced_package_with_version_constraint_containing_spaces' => [
+            '@hotwired/turbo@^7.1.0 || ^8.0',
+            [
+                'package' => '@hotwired/turbo',
+                'version' => '^7.1.0 || ^8.0',
+            ],
+        ];
+
+        yield 'namespaced_package_with_version_constraint_without_spaces_around_operator' => [
+            '@hotwired/turbo@^7.1.0||^8.0',
+            [
+                'package' => '@hotwired/turbo',
+                'version' => '^7.1.0||^8.0',
             ],
         ];
     }
@@ -442,7 +466,7 @@ class ImportMapManagerTest extends TestCase
 
     private static function createLocalEntry(string $importName, string $path, ImportMapType $type = ImportMapType::JS, bool $isEntrypoint = false): ImportMapEntry
     {
-        return ImportMapEntry::createLocal($importName, $type, path: $path, isEntrypoint: $isEntrypoint);
+        return ImportMapEntry::createLocal($importName, $type, $path, $isEntrypoint);
     }
 
     private static function createRemoteEntry(string $importName, string $version, ?string $path = null, ImportMapType $type = ImportMapType::JS, ?string $packageSpecifier = null, bool $isEntrypoint = false): ImportMapEntry
@@ -450,6 +474,6 @@ class ImportMapManagerTest extends TestCase
         $packageSpecifier ??= $importName;
         $path ??= '/vendor/any-path.js';
 
-        return ImportMapEntry::createRemote($importName, $type, path: $path, version: $version, packageModuleSpecifier: $packageSpecifier, isEntrypoint: $isEntrypoint);
+        return ImportMapEntry::createRemote($importName, $type, $path, $version, $packageSpecifier, $isEntrypoint);
     }
 }
