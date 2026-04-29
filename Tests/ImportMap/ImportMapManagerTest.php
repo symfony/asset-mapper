@@ -349,6 +349,14 @@ class ImportMapManagerTest extends TestCase
             ],
         ];
 
+        yield 'with_version_constraint_containing_spaces' => [
+            'lodash@^1.2.3 || ^2.0',
+            [
+                'package' => 'lodash',
+                'version' => '^1.2.3 || ^2.0',
+            ],
+        ];
+
         yield 'namespaced_package_simple' => [
             '@hotwired/stimulus',
             [
@@ -361,6 +369,22 @@ class ImportMapManagerTest extends TestCase
             [
                 'package' => '@hotwired/stimulus',
                 'version' => '^1.2.3',
+            ],
+        ];
+
+        yield 'namespaced_package_with_version_constraint_containing_spaces' => [
+            '@hotwired/turbo@^7.1.0 || ^8.0',
+            [
+                'package' => '@hotwired/turbo',
+                'version' => '^7.1.0 || ^8.0',
+            ],
+        ];
+
+        yield 'namespaced_package_with_version_constraint_without_spaces_around_operator' => [
+            '@hotwired/turbo@^7.1.0||^8.0',
+            [
+                'package' => '@hotwired/turbo',
+                'version' => '^7.1.0||^8.0',
             ],
         ];
     }
