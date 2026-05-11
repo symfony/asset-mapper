@@ -587,6 +587,34 @@ class JavaScriptImportPathCompilerTest extends TestCase
         $this->assertCount(0, $bootstrapAsset->getJavaScriptImports());
     }
 
+    public function testCompileDoesNotWarnOnBareCssImportPresentInImportmap()
+    {
+        $appAsset = new MappedAsset('app.js', '/path/to/app.js');
+        $cssAsset = new MappedAsset('some-package/styles.css', '/path/to/vendor/some-package/styles.css', publicPathWithoutDigest: '/assets/some-package/styles.css');
+
+        $importMapConfigReader = $this->createMock(ImportMapConfigReader::class);
+        $importMapConfigReader->expects($this->once())
+            ->method('findRootImportMapEntry')
+            ->with('some-package/styles.css')
+            ->willReturn(ImportMapEntry::createRemote('some-package/styles.css', ImportMapType::CSS, './vendor/some-package/styles.css', '1.2.3', 'could_be_anything', false));
+        $importMapConfigReader
+            ->method('convertPathToFilesystemPath')
+            ->willReturnMap([
+                ['./vendor/some-package/styles.css', '/path/to/vendor/some-package/styles.css'],
+            ]);
+
+        $assetMapper = $this->createMock(AssetMapperInterface::class);
+        $assetMapper->expects($this->once())
+            ->method('getAssetFromSourcePath')
+            ->with('/path/to/vendor/some-package/styles.css')
+            ->willReturn($cssAsset);
+
+        $compiler = new JavaScriptImportPathCompiler($importMapConfigReader, AssetCompilerInterface::MISSING_IMPORT_STRICT, new NullLogger());
+        $input = "import 'some-package/styles.css';";
+        $this->assertSame($input, $compiler->compile($input, $appAsset, $assetMapper));
+        $this->assertCount(1, $appAsset->getJavaScriptImports());
+    }
+
     /**
      * @dataProvider provideMissingImportModeTests
      */
@@ -641,6 +669,60 @@ class JavaScriptImportPathCompilerTest extends TestCase
         yield 'importing_a_url_is_ignored' => [
             'sourceLogicalName' => 'app.js',
             'input' => "import 'https://example.com/other.js';",
+            'expectedExceptionMessage' => null,
+        ];
+
+        yield 'importing_a_bare_module_is_ignored_because_it_could_be_a_url' => [
+            'sourceLogicalName' => 'app.js',
+            'input' => "import 'lodash';",
+            'expectedExceptionMessage' => null,
+        ];
+
+        yield 'importing_a_bare_js_package_whose_name_ends_in_dot_js_is_ignored' => [
+            'sourceLogicalName' => 'app.js',
+            'input' => "import 'chart.js';",
+            'expectedExceptionMessage' => null,
+        ];
+
+        yield 'importing_a_missing_bare_css_file_throws_exception' => [
+            'sourceLogicalName' => 'app.js',
+            'input' => "import 'some-package/styles.css';",
+            'expectedExceptionMessage' => 'Unable to find asset "some-package/styles.css" imported from "/path/to/app.js". Add it to "importmap.php", e.g. via the "importmap:require" command.',
+        ];
+
+        yield 'dynamic_importing_a_missing_bare_css_file_throws_exception' => [
+            'sourceLogicalName' => 'app.js',
+            'input' => "await import('some-package/styles.css');",
+            'expectedExceptionMessage' => 'Unable to find asset "some-package/styles.css" imported from "/path/to/app.js". Add it to "importmap.php", e.g. via the "importmap:require" command.',
+        ];
+
+        yield 'importing_a_css_file_from_a_url_is_ignored' => [
+            'sourceLogicalName' => 'app.js',
+            'input' => "import 'https://example.com/styles.css';",
+            'expectedExceptionMessage' => null,
+        ];
+
+        yield 'importing_a_missing_bare_css_file_with_uppercase_extension_throws_exception' => [
+            'sourceLogicalName' => 'app.js',
+            'input' => "import 'some-package/styles.CSS';",
+            'expectedExceptionMessage' => 'Unable to find asset "some-package/styles.CSS" imported from "/path/to/app.js". Add it to "importmap.php", e.g. via the "importmap:require" command.',
+        ];
+
+        yield 'importing_a_missing_bare_json_file_throws_exception' => [
+            'sourceLogicalName' => 'app.js',
+            'input' => "import data from 'some-package/data.json';",
+            'expectedExceptionMessage' => 'Unable to find asset "some-package/data.json" imported from "/path/to/app.js". Add it to "importmap.php", e.g. via the "importmap:require" command.',
+        ];
+
+        yield 'dynamic_importing_a_missing_bare_json_file_throws_exception' => [
+            'sourceLogicalName' => 'app.js',
+            'input' => "await import('some-package/data.json');",
+            'expectedExceptionMessage' => 'Unable to find asset "some-package/data.json" imported from "/path/to/app.js". Add it to "importmap.php", e.g. via the "importmap:require" command.',
+        ];
+
+        yield 'importing_a_json_file_from_a_url_is_ignored' => [
+            'sourceLogicalName' => 'app.js',
+            'input' => "import data from 'https://example.com/data.json';",
             'expectedExceptionMessage' => null,
         ];
     }
