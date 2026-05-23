@@ -28,9 +28,6 @@ use Symfony\Component\Filesystem\Path;
  */
 final class JavaScriptImportPathCompiler implements AssetCompilerInterface
 {
-    /**
-     * @see https://regex101.com/r/1iBAIb/2
-     */
     private const IMPORT_PATTERN = '/
             ^(?:\/\/.*)                     # Lines that start with comments
         |
@@ -46,6 +43,10 @@ final class JavaScriptImportPathCompiler implements AssetCompilerInterface
                         (?:\*\s*as\s+\w+|\s+[\w\s{},*]+)
                         \s*from\s*
                     )?
+            |
+                export\s*
+                    (?:\*(?:\s*as\s+\w+)?|\{[^}]*+\})
+                    \s*from\s*
             |
                 \bimport\(
             )
