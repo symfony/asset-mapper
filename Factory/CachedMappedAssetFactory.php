@@ -36,7 +36,7 @@ class CachedMappedAssetFactory implements MappedAssetFactoryInterface
         $configCache = new ConfigCache($cachePath, $this->debug);
 
         if ($configCache->isFresh()) {
-            return unserialize(file_get_contents($cachePath));
+            return unserialize(file_get_contents($cachePath), ['allowed_classes' => true]);
         }
 
         $mappedAsset = $this->innerFactory->createMappedAsset($logicalPath, $sourcePath);
