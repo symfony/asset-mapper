@@ -229,4 +229,19 @@ class ImportMapRendererTest extends TestCase
         $this->assertSame(['as' => 'style'], $linkProvider->getLinks()[0]->getAttributes());
         $this->assertSame('/assets/styles/app-preload-d1g35t.css', $linkProvider->getLinks()[0]->getHref());
     }
+
+    public function testEmptyImportMapRendersAsJsonObject()
+    {
+        $importMapGenerator = $this->createMock(ImportMapGenerator::class);
+        $importMapGenerator->expects($this->once())
+            ->method('getImportMapData')
+            ->with([])
+            ->willReturn([]);
+
+        $renderer = new ImportMapRenderer($importMapGenerator);
+        $html = $renderer->render([]);
+
+        $this->assertStringContainsString('"imports": {}', $html);
+        $this->assertStringNotContainsString('"imports": []', $html);
+    }
 }
