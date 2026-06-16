@@ -17,6 +17,7 @@ use Symfony\Component\Config\Resource\DirectoryResource;
 use Symfony\Component\Config\Resource\FileExistenceResource;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Config\Resource\ResourceInterface;
+use Symfony\Component\Config\ResourceCheckerConfigCache;
 
 /**
  * Decorates the asset factory to load MappedAssets from cache when possible.
@@ -33,7 +34,13 @@ class CachedMappedAssetFactory implements MappedAssetFactoryInterface
     public function createMappedAsset(string $logicalPath, string $sourcePath): ?MappedAsset
     {
         $cachePath = $this->getCacheFilePath($logicalPath, $sourcePath);
-        $configCache = new ConfigCache($cachePath, $this->debug);
+
+        if ($this->debug) {
+            clearstatcache();
+            $configCache = new ResourceCheckerConfigCache($cachePath, [new NonCachingSelfCheckingResourceChecker()]);
+        } else {
+            $configCache = new ConfigCache($cachePath, false);
+        }
 
         if ($configCache->isFresh()) {
             return unserialize(file_get_contents($cachePath), ['allowed_classes' => true]);
