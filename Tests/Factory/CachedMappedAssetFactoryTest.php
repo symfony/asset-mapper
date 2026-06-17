@@ -85,6 +85,50 @@ class CachedMappedAssetFactoryTest extends TestCase
         $this->assertSame($mappedAsset->content, $actualAsset->content);
     }
 
+    public function testAssetCacheFreshnessIsNotMemoizedInDebugMode()
+    {
+        $sourcePath = $this->cacheDir.'/externally_built.css';
+        file_put_contents($sourcePath, 'old content');
+
+        $mappedAsset = new MappedAsset('externally_built.css', $sourcePath, content: 'cached content');
+        $this->saveConfigCache($mappedAsset);
+
+        // Start with a fresh asset cache so ConfigCache memoizes a positive freshness result.
+        $cachePath = $this->getConfigCachePath($mappedAsset);
+        $cacheTimestamp = time() - 10;
+        $sourceTimestamp = $cacheTimestamp - 10;
+        $newSourceTimestamp = $cacheTimestamp + 1;
+        touch($sourcePath, $sourceTimestamp);
+        touch($cachePath, $cacheTimestamp);
+        clearstatcache();
+
+        $configCache = new ConfigCache($cachePath, true);
+        $this->assertTrue($configCache->isFresh());
+
+        // Simulate an external build tool updating a dependency while the PHP process keeps running.
+        file_put_contents($sourcePath, 'new content');
+        touch($sourcePath, $newSourceTimestamp);
+        clearstatcache();
+
+        // AssetMapper should recheck the dependency instead of reusing ConfigCache's memoized answer.
+        $rebuiltAsset = new MappedAsset('externally_built.css', $sourcePath, content: 'rebuilt content');
+
+        $factory = $this->createMock(MappedAssetFactoryInterface::class);
+        $factory->expects($this->once())
+            ->method('createMappedAsset')
+            ->with('externally_built.css', $sourcePath)
+            ->willReturn($rebuiltAsset);
+
+        $cachedFactory = new CachedMappedAssetFactory(
+            $factory,
+            $this->cacheDir,
+            true
+        );
+
+        $actualAsset = $cachedFactory->createMappedAsset('externally_built.css', $sourcePath);
+        $this->assertSame($rebuiltAsset->content, $actualAsset->content);
+    }
+
     public function testAssetConfigCacheResourceContainsDependencies()
     {
         $sourcePath = realpath(__DIR__.'/../Fixtures/dir1/file1.css');
