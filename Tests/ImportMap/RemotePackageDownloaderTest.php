@@ -24,10 +24,11 @@ use Symfony\Component\Filesystem\Filesystem;
 class RemotePackageDownloaderTest extends TestCase
 {
     private Filesystem $filesystem;
-    private static string $writableRoot = __DIR__.'/../Fixtures/remote_package_downloader';
+    private static string $writableRoot;
 
     protected function setUp(): void
     {
+        self::$writableRoot = sys_get_temp_dir().'/sf_remote_package_downloader_'.bin2hex(random_bytes(4));
         $this->filesystem = new Filesystem();
         $this->filesystem->mkdir(self::$writableRoot);
     }

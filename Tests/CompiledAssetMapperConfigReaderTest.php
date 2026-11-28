@@ -23,10 +23,8 @@ class CompiledAssetMapperConfigReaderTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->writableRoot = __DIR__.'/../Fixtures/compiled_asset_mapper_config_reader';
-        if (!file_exists(__DIR__.'/../Fixtures/compiled_asset_mapper_config_reader')) {
-            $this->filesystem->mkdir($this->writableRoot);
-        }
+        $this->writableRoot = sys_get_temp_dir().'/sf_compiled_asset_mapper_config_reader_'.bin2hex(random_bytes(4));
+        $this->filesystem->mkdir($this->writableRoot);
         // realpath to help path comparisons in the tests
         $this->writableRoot = realpath($this->writableRoot);
     }

@@ -19,12 +19,13 @@ use Symfony\Component\Filesystem\Filesystem;
 class LocalPublicAssetsFilesystemTest extends TestCase
 {
     private Filesystem $filesystem;
-    private static string $writableRoot = __DIR__.'/../Fixtures/local_public_assets_filesystem';
+    private static string $writableRoot;
 
     protected function setUp(): void
     {
+        self::$writableRoot = sys_get_temp_dir().'/sf_local_public_assets_filesystem_'.bin2hex(random_bytes(4));
         $this->filesystem = new Filesystem();
-        if (!file_exists(__DIR__.'/../Fixtures/local_public_assets_filesystem')) {
+        if (!file_exists(self::$writableRoot)) {
             $this->filesystem->mkdir(self::$writableRoot);
         }
     }

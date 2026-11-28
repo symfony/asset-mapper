@@ -20,7 +20,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class ZstandardCompressorTest extends TestCase
 {
-    private const WRITABLE_ROOT = __DIR__.'/../Fixtures/zstandard_compressor_filesystem';
+    private string $writableRoot;
 
     private ?Filesystem $filesystem = null;
 
@@ -34,23 +34,24 @@ class ZstandardCompressorTest extends TestCase
             $this->markTestSkipped('ext-zstd up to 0.18.0 reports a failure when closing a compressing stream.');
         }
 
+        $this->writableRoot = sys_get_temp_dir().'/sf_zstandard_compressor_'.bin2hex(random_bytes(4));
         $this->filesystem = new Filesystem();
-        if (!file_exists(self::WRITABLE_ROOT)) {
-            $this->filesystem->mkdir(self::WRITABLE_ROOT);
+        if (!file_exists($this->writableRoot)) {
+            $this->filesystem->mkdir($this->writableRoot);
         }
     }
 
     protected function tearDown(): void
     {
-        $this->filesystem?->remove(self::WRITABLE_ROOT);
+        $this->filesystem?->remove($this->writableRoot);
     }
 
     public function testCompress()
     {
-        $this->filesystem->dumpFile(self::WRITABLE_ROOT.'/foo/bar.js', 'foobar');
+        $this->filesystem->dumpFile($this->writableRoot.'/foo/bar.js', 'foobar');
 
-        (new ZstandardCompressor())->compress(self::WRITABLE_ROOT.'/foo/bar.js');
+        (new ZstandardCompressor())->compress($this->writableRoot.'/foo/bar.js');
 
-        $this->assertFileExists(self::WRITABLE_ROOT.'/foo/bar.js.zst');
+        $this->assertFileExists($this->writableRoot.'/foo/bar.js.zst');
     }
 }

@@ -25,11 +25,12 @@ use Symfony\Component\Filesystem\Filesystem;
 class CachedMappedAssetFactoryTest extends TestCase
 {
     private Filesystem $filesystem;
-    private string $cacheDir = __DIR__.'/../Fixtures/var/cache_for_mapped_asset_factory_test';
+    private string $cacheDir;
 
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
+        $this->cacheDir = sys_get_temp_dir().'/sf_cached_mapped_asset_factory_'.bin2hex(random_bytes(4));
         $this->filesystem->mkdir($this->cacheDir);
     }
 
