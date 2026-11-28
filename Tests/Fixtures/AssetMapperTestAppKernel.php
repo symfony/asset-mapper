@@ -20,6 +20,8 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class AssetMapperTestAppKernel extends Kernel
 {
+    private static ?string $projectDir = null;
+
     public function registerBundles(): iterable
     {
         return [
@@ -29,7 +31,7 @@ class AssetMapperTestAppKernel extends Kernel
 
     public function getProjectDir(): string
     {
-        return __DIR__;
+        return self::$projectDir ??= sys_get_temp_dir().'/sf_asset_mapper_test_app_'.bin2hex(random_bytes(4));
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
@@ -42,7 +44,9 @@ class AssetMapperTestAppKernel extends Kernel
                 'http_client' => true,
                 'assets' => null,
                 'asset_mapper' => [
-                    'paths' => ['dir1', 'dir2', 'non_ascii', 'assets'],
+                    'paths' => [__DIR__.'/dir1', __DIR__.'/dir2', __DIR__.'/non_ascii', __DIR__.'/assets'],
+                    'importmap_path' => __DIR__.'/importmap.php',
+                    'vendor_dir' => __DIR__.'/assets/vendor',
                     'public_prefix' => 'assets',
                 ],
                 'test' => true,

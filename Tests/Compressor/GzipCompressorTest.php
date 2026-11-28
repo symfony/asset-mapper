@@ -20,29 +20,30 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class GzipCompressorTest extends TestCase
 {
-    private const WRITABLE_ROOT = __DIR__.'/../Fixtures/gzip_compressor_filesystem';
+    private string $writableRoot;
 
     private Filesystem $filesystem;
 
     protected function setUp(): void
     {
+        $this->writableRoot = sys_get_temp_dir().'/sf_gzip_compressor_'.bin2hex(random_bytes(4));
         $this->filesystem = new Filesystem();
-        if (!file_exists(self::WRITABLE_ROOT)) {
-            $this->filesystem->mkdir(self::WRITABLE_ROOT);
+        if (!file_exists($this->writableRoot)) {
+            $this->filesystem->mkdir($this->writableRoot);
         }
     }
 
     protected function tearDown(): void
     {
-        $this->filesystem->remove(self::WRITABLE_ROOT);
+        $this->filesystem->remove($this->writableRoot);
     }
 
     public function testCompress()
     {
-        $this->filesystem->dumpFile(self::WRITABLE_ROOT.'/foo/bar.js', 'foobar');
+        $this->filesystem->dumpFile($this->writableRoot.'/foo/bar.js', 'foobar');
 
-        (new GzipCompressor())->compress(self::WRITABLE_ROOT.'/foo/bar.js');
+        (new GzipCompressor())->compress($this->writableRoot.'/foo/bar.js');
 
-        $this->assertFileExists(self::WRITABLE_ROOT.'/foo/bar.js.gz');
+        $this->assertFileExists($this->writableRoot.'/foo/bar.js.gz');
     }
 }

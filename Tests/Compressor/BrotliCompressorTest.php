@@ -20,7 +20,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class BrotliCompressorTest extends TestCase
 {
-    private const WRITABLE_ROOT = __DIR__.'/../Fixtures/brotli_compressor_filesystem';
+    private string $writableRoot;
 
     private ?Filesystem $filesystem = null;
 
@@ -34,23 +34,24 @@ class BrotliCompressorTest extends TestCase
             $this->markTestSkipped('ext-brotli up to 0.21.0 reports a failure when closing a compressing stream.');
         }
 
+        $this->writableRoot = sys_get_temp_dir().'/sf_brotli_compressor_'.bin2hex(random_bytes(4));
         $this->filesystem = new Filesystem();
-        if (!file_exists(self::WRITABLE_ROOT)) {
-            $this->filesystem->mkdir(self::WRITABLE_ROOT);
+        if (!file_exists($this->writableRoot)) {
+            $this->filesystem->mkdir($this->writableRoot);
         }
     }
 
     protected function tearDown(): void
     {
-        $this->filesystem?->remove(self::WRITABLE_ROOT);
+        $this->filesystem?->remove($this->writableRoot);
     }
 
     public function testCompress()
     {
-        $this->filesystem->dumpFile(self::WRITABLE_ROOT.'/foo/bar.js', 'foobar');
+        $this->filesystem->dumpFile($this->writableRoot.'/foo/bar.js', 'foobar');
 
-        (new BrotliCompressor())->compress(self::WRITABLE_ROOT.'/foo/bar.js');
+        (new BrotliCompressor())->compress($this->writableRoot.'/foo/bar.js');
 
-        $this->assertFileExists(self::WRITABLE_ROOT.'/foo/bar.js.br');
+        $this->assertFileExists($this->writableRoot.'/foo/bar.js.br');
     }
 }

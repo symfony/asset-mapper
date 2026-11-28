@@ -23,7 +23,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class ChainCompressorTest extends TestCase
 {
-    private const WRITABLE_ROOT = __DIR__.'/../Fixtures/chain_compressor_filesystem';
+    private string $writableRoot;
 
     private ?Filesystem $filesystem = null;
 
@@ -37,15 +37,16 @@ class ChainCompressorTest extends TestCase
             $this->markTestSkipped('ext-zstd up to 0.18.0 reports a failure when closing a compressing stream.');
         }
 
+        $this->writableRoot = sys_get_temp_dir().'/sf_chain_compressor_'.bin2hex(random_bytes(4));
         $this->filesystem = new Filesystem();
-        if (!file_exists(self::WRITABLE_ROOT)) {
-            $this->filesystem->mkdir(self::WRITABLE_ROOT);
+        if (!file_exists($this->writableRoot)) {
+            $this->filesystem->mkdir($this->writableRoot);
         }
     }
 
     protected function tearDown(): void
     {
-        $this->filesystem?->remove(self::WRITABLE_ROOT);
+        $this->filesystem?->remove($this->writableRoot);
     }
 
     public function testCompress()
@@ -65,12 +66,12 @@ class ChainCompressorTest extends TestCase
             $this->markTestSkipped('No supported compressors available.');
         }
 
-        $this->filesystem->dumpFile(self::WRITABLE_ROOT.'/foo/bar.js', 'foobar');
+        $this->filesystem->dumpFile($this->writableRoot.'/foo/bar.js', 'foobar');
 
-        (new ChainCompressor())->compress(self::WRITABLE_ROOT.'/foo/bar.js');
+        (new ChainCompressor())->compress($this->writableRoot.'/foo/bar.js');
 
         foreach ($extensions as $extension) {
-            $this->assertFileExists(self::WRITABLE_ROOT.'/foo/bar.js.'.$extension);
+            $this->assertFileExists($this->writableRoot.'/foo/bar.js.'.$extension);
         }
     }
 }

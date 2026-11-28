@@ -27,6 +27,12 @@ use Symfony\Component\Finder\Finder;
 
 class ImportMapRequireCommandTest extends KernelTestCase
 {
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        (new Filesystem())->remove((new ImportMapTestAppKernel('test', true))->getProjectDir());
+    }
+
     protected static function getKernelClass(): string
     {
         return ImportMapTestAppKernel::class;
@@ -179,16 +185,16 @@ class ImportMapRequireCommandTest extends KernelTestCase
         $application = new Application(self::$kernel);
         $command = $application->find('importmap:require');
 
-        $importMapContentBefore = $fs->readFile($projectDir.'/importmap.php');
-        $installedVendorBefore = $fs->readFile($projectDir.'/assets/vendor/installed.php');
+        $importMapContentBefore = $fs->readFile(__DIR__.'/../Fixtures/importmap.php');
+        $installedVendorBefore = $fs->readFile(__DIR__.'/../Fixtures/assets/vendor/installed.php');
 
         $tester = new CommandTester($command);
         $tester->execute(['packages' => ['bootstrap'], '--dry-run' => true]);
 
         $tester->assertCommandIsSuccessful();
 
-        $this->assertSame($importMapContentBefore, $fs->readFile($projectDir.'/importmap.php'));
-        $this->assertSame($installedVendorBefore, $fs->readFile($projectDir.'/assets/vendor/installed.php'));
+        $this->assertSame($importMapContentBefore, $fs->readFile(__DIR__.'/../Fixtures/importmap.php'));
+        $this->assertSame($installedVendorBefore, $fs->readFile(__DIR__.'/../Fixtures/assets/vendor/installed.php'));
 
         $this->assertSame('{}', $fs->readFile($projectDir.'/public/assets/manifest.json'));
         $this->assertSame('{}', $fs->readFile($projectDir.'/public/assets/importmap.json'));
@@ -197,9 +203,6 @@ class ImportMapRequireCommandTest extends KernelTestCase
         $finder->in($projectDir.'/public/assets')->files()->depth(0);
 
         $this->assertCount(2, $finder); // manifest.json + importmap.json
-
-        $fs->remove($projectDir.'/public');
-        $fs->remove($projectDir.'/var');
 
         static::$kernel->shutdown();
     }
