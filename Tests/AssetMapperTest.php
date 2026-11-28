@@ -60,7 +60,7 @@ class AssetMapperTest extends TestCase
         $repository = new AssetMapperRepository(['dir1' => '', 'dir2' => '', 'dir3' => ''], __DIR__.'/Fixtures');
 
         $filesystem = new Filesystem();
-        $writableRoot = sys_get_temp_dir().'/sf_debug_compiled_manifest_'.bin2hex(random_bytes(4));
+        $writableRoot = sys_get_temp_dir().'/sf_asset-mapper_'.hash('xxh32', __FILE__);
         $filesystem->dumpFile($writableRoot.'/manifest.json', json_encode(['file1.css' => '/from-manifest/file1.css']));
 
         try {
