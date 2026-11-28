@@ -45,7 +45,7 @@ class ImportMapManagerTest extends TestCase
     private static function getWritableRoot(): string
     {
         // a data provider needs it before setUp()
-        return self::$writableRoot ??= sys_get_temp_dir().'/sf_importmap_manager_'.bin2hex(random_bytes(4));
+        return self::$writableRoot ??= sys_get_temp_dir().'/sf_asset-mapper_'.hash('xxh32', __FILE__);
     }
 
     protected function setUp(): void

@@ -26,7 +26,7 @@ class RemotePackageStorageTest extends TestCase
 
     protected function setUp(): void
     {
-        self::$writableRoot = sys_get_temp_dir().'/remote_package_storage'.++self::$writableRootIndex;
+        self::$writableRoot = sys_get_temp_dir().'/sf_asset-mapper_'.hash('xxh32', __FILE__).'/'.++self::$writableRootIndex;
         $this->filesystem = new Filesystem();
         $this->filesystem->mkdir(self::$writableRoot);
     }
