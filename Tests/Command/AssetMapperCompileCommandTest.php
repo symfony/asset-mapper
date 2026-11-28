@@ -35,8 +35,7 @@ class AssetMapperCompileCommandTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->filesystem->remove($this->kernel->getProjectDir().'/public');
-        $this->filesystem->remove($this->kernel->getProjectDir().'/var');
+        $this->filesystem->remove($this->kernel->getProjectDir());
     }
 
     public function testAssetsAreCompiled()

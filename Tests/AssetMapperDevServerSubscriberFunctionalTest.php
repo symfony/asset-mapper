@@ -14,6 +14,7 @@ namespace Symfony\Component\AssetMapper\Tests;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\AssetMapper\Tests\Fixtures\AssetMapperTestAppKernel;
 use Symfony\Component\AssetMapper\Tests\Fixtures\InstantiationCountingDataCollector;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class AssetMapperDevServerSubscriberFunctionalTest extends WebTestCase
@@ -104,6 +105,12 @@ class AssetMapperDevServerSubscriberFunctionalTest extends WebTestCase
             EOF,
             $response->getFile()->getContent()
         );
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        (new Filesystem())->remove((new AssetMapperTestAppKernel('test', true))->getProjectDir());
     }
 
     protected static function getKernelClass(): string

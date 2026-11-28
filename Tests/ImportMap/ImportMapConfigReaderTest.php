@@ -24,18 +24,20 @@ use Symfony\Component\Filesystem\Filesystem;
 class ImportMapConfigReaderTest extends TestCase
 {
     private Filesystem $filesystem;
+    private string $writableRoot;
 
     protected function setUp(): void
     {
+        $this->writableRoot = sys_get_temp_dir().'/sf_importmap_config_reader_'.bin2hex(random_bytes(4));
         $this->filesystem = new Filesystem();
-        if (!file_exists(__DIR__.'/../Fixtures/importmap_config_reader/assets')) {
-            $this->filesystem->mkdir(__DIR__.'/../Fixtures/importmap_config_reader/assets');
+        if (!file_exists($this->writableRoot.'/assets')) {
+            $this->filesystem->mkdir($this->writableRoot.'/assets');
         }
     }
 
     protected function tearDown(): void
     {
-        $this->filesystem->remove(__DIR__.'/../Fixtures/importmap_config_reader');
+        $this->filesystem->remove($this->writableRoot);
     }
 
     public function testGetEntriesAndWriteEntries()
@@ -66,14 +68,14 @@ class ImportMapConfigReaderTest extends TestCase
                 ],
             ];
             EOF;
-        file_put_contents(__DIR__.'/../Fixtures/importmap_config_reader/importmap.php', $importMap);
+        file_put_contents($this->writableRoot.'/importmap.php', $importMap);
 
         $remotePackageStorage = $this->createStub(RemotePackageStorage::class);
         $remotePackageStorage
             ->method('getDownloadPath')
             ->willReturnCallback(static fn (string $packageModuleSpecifier, ImportMapType $type) => '/path/to/vendor/'.$packageModuleSpecifier.'.'.$type->value);
         $reader = new ImportMapConfigReader(
-            __DIR__.'/../Fixtures/importmap_config_reader/importmap.php',
+            $this->writableRoot.'/importmap.php',
             $remotePackageStorage,
         );
         $entries = $reader->getEntries();
@@ -104,11 +106,12 @@ class ImportMapConfigReaderTest extends TestCase
         $this->assertSame('css', $typeCssEntry->type->value);
 
         // now save the original raw data from importmap.php and delete the file
-        $originalImportMapData = (static fn () => eval('?>'.file_get_contents(__DIR__.'/../Fixtures/importmap_config_reader/importmap.php')))();
-        unlink(__DIR__.'/../Fixtures/importmap_config_reader/importmap.php');
+        $importMapPath = $this->writableRoot.'/importmap.php';
+        $originalImportMapData = (static fn () => eval('?>'.file_get_contents($importMapPath)))();
+        unlink($importMapPath);
         // dump the entries back to the file
         $reader->writeEntries($entries);
-        $newImportMapData = (static fn () => eval('?>'.file_get_contents(__DIR__.'/../Fixtures/importmap_config_reader/importmap.php')))();
+        $newImportMapData = (static fn () => eval('?>'.file_get_contents($importMapPath)))();
 
         $this->assertSame($originalImportMapData, $newImportMapData);
     }
@@ -116,13 +119,14 @@ class ImportMapConfigReaderTest extends TestCase
     #[DataProvider('getAlphabeticalEntriesTests')]
     public function testWriteEntriesEstablishesAlphabeticalEntryOrder(ImportMapEntries $entries, array $expectedKeys)
     {
+        $importMapPath = $this->writableRoot.'/importmap.php';
         $configReader = new ImportMapConfigReader(
-            __DIR__.'/../Fixtures/importmap_config_reader/importmap.php',
+            $importMapPath,
             new RemotePackageStorage(sys_get_temp_dir()),
         );
 
         $configReader->writeEntries($entries);
-        $importMapData = (static fn () => eval('?>'.file_get_contents(__DIR__.'/../Fixtures/importmap_config_reader/importmap.php')))();
+        $importMapData = (static fn () => eval('?>'.file_get_contents($importMapPath)))();
 
         $this->assertSame($expectedKeys, array_keys($importMapData));
     }
@@ -203,7 +207,7 @@ class ImportMapConfigReaderTest extends TestCase
 
     public function testGetEntriesThrowsWhenImportmapDoesNotReturnArray()
     {
-        $configPath = __DIR__.'/../Fixtures/importmap_config_reader/importmap.php';
+        $configPath = $this->writableRoot.'/importmap.php';
         file_put_contents($configPath, "<?php\n");
 
         $reader = new ImportMapConfigReader($configPath, $this->createStub(RemotePackageStorage::class));
@@ -216,7 +220,7 @@ class ImportMapConfigReaderTest extends TestCase
 
     public function testGetEntriesThrowsOnUnknownTypeValue()
     {
-        $configPath = __DIR__.'/../Fixtures/importmap_config_reader/importmap.php';
+        $configPath = $this->writableRoot.'/importmap.php';
         file_put_contents($configPath, <<<'EOF'
             <?php
             return [
@@ -237,7 +241,7 @@ class ImportMapConfigReaderTest extends TestCase
 
     public function testGetEntriesRunsImportmapWithoutClassScope()
     {
-        $configPath = __DIR__.'/../Fixtures/importmap_config_reader/importmap.php';
+        $configPath = $this->writableRoot.'/importmap.php';
         file_put_contents($configPath, <<<'EOF'
             <?php
             $scope = (new \ReflectionFunction(static fn () => null))->getClosureScopeClass();

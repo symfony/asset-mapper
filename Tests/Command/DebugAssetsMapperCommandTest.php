@@ -15,9 +15,15 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\AssetMapper\Tests\Fixtures\AssetMapperTestAppKernel;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Filesystem\Filesystem;
 
 class DebugAssetsMapperCommandTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        (new Filesystem())->remove((new AssetMapperTestAppKernel('test', true))->getProjectDir());
+    }
+
     public function testCommandDumpsInformation()
     {
         $application = new Application(new AssetMapperTestAppKernel('test', true));
