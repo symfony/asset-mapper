@@ -30,7 +30,7 @@ class CachedMappedAssetFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->cacheDir = sys_get_temp_dir().'/sf_cached_mapped_asset_factory_'.bin2hex(random_bytes(4));
+        $this->cacheDir = sys_get_temp_dir().'/sf_asset-mapper_'.hash('xxh32', __FILE__);
         $this->filesystem->mkdir($this->cacheDir);
     }
 

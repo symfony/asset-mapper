@@ -28,7 +28,7 @@ class RemotePackageDownloaderTest extends TestCase
 
     protected function setUp(): void
     {
-        self::$writableRoot = sys_get_temp_dir().'/sf_remote_package_downloader_'.bin2hex(random_bytes(4));
+        self::$writableRoot = sys_get_temp_dir().'/sf_asset-mapper_'.hash('xxh32', __FILE__);
         $this->filesystem = new Filesystem();
         $this->filesystem->mkdir(self::$writableRoot);
     }
