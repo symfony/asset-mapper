@@ -29,7 +29,7 @@ class ImportMapConfigReaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->writableRoot = sys_get_temp_dir().'/sf_importmap_config_reader_'.bin2hex(random_bytes(4));
+        $this->writableRoot = sys_get_temp_dir().'/sf_asset-mapper_'.hash('xxh32', __FILE__);
         $this->filesystem = new Filesystem();
         if (!file_exists($this->writableRoot.'/assets')) {
             $this->filesystem->mkdir($this->writableRoot.'/assets');

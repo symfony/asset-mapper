@@ -34,7 +34,7 @@ class ZstandardCompressorTest extends TestCase
             $this->markTestSkipped('ext-zstd up to 0.18.0 reports a failure when closing a compressing stream.');
         }
 
-        $this->writableRoot = sys_get_temp_dir().'/sf_zstandard_compressor_'.bin2hex(random_bytes(4));
+        $this->writableRoot = sys_get_temp_dir().'/sf_asset-mapper_'.hash('xxh32', __FILE__);
         $this->filesystem = new Filesystem();
         if (!file_exists($this->writableRoot)) {
             $this->filesystem->mkdir($this->writableRoot);

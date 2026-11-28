@@ -19,8 +19,6 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class ImportMapTestAppKernel extends Kernel
 {
-    private static ?string $projectDir = null;
-
     public function registerBundles(): iterable
     {
         return [
@@ -30,7 +28,7 @@ class ImportMapTestAppKernel extends Kernel
 
     public function getProjectDir(): string
     {
-        return self::$projectDir ??= sys_get_temp_dir().'/sf_importmap_test_app_'.bin2hex(random_bytes(4));
+        return sys_get_temp_dir().'/sf_asset-mapper_'.hash('xxh32', __FILE__);
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
