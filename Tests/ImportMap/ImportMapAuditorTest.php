@@ -138,6 +138,19 @@ class ImportMapAuditorTest extends TestCase
         yield [false, '4.0.0-canary.34', '>= 4.0.0-canary.0, < 4.0.0-canary.34'];
     }
 
+    public function testAuditErrorWithPercentSignInResponse()
+    {
+        $this->httpClient->setResponseFactory(new MockResponse('<body style="width:100%;">Bad Gateway</body>', ['http_code' => 502]));
+        $this->importMapConfigReader->method('getEntries')->willReturn(new ImportMapEntries([
+            self::createRemoteEntry('json5', '1.0.0'),
+        ]));
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Error 502 auditing packages. Response: <body style="width:100%;">Bad Gateway</body>');
+
+        $this->importMapAuditor->audit();
+    }
+
     public function testAuditError()
     {
         $this->httpClient->setResponseFactory(new MockResponse('Server error', ['http_code' => 500]));
